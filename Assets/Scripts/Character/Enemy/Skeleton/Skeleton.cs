@@ -8,6 +8,7 @@ public class Skeleton : Character
         Debug.Log("hello");
         Debug.Log("hello");
         Debug.Log("hello");
+        Debug.Log("hello");
     }
 
     protected override void Update()
