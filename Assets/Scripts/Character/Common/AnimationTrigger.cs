@@ -7,6 +7,7 @@ public class AnimationTrigger<T> : MonoBehaviour where T : Character
     private void Start()
     {
         character = GetComponentInParent<T>();
+        if (!character) Debug.LogError($"父物体未找到名为 {typeof(T)} 的组件");
     }
 
     private void AnimationFinishTrigger()
@@ -20,9 +21,10 @@ public class AnimationTrigger<T> : MonoBehaviour where T : Character
 
         foreach (var hit in coliders)
         {
+            if (hit.transform == transform.parent) continue;
             var damageable = hit.GetComponent<Damageable>();
             if (!damageable) continue;
-            damageable.TakeDamage(damageable.gameObject, 1);
+            damageable.TakeDamage(gameObject, damageable.gameObject, 1);
         }
     }
 }

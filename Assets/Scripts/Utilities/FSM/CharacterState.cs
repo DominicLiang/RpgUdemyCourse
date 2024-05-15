@@ -39,10 +39,10 @@ public class CharacterState<T> : IState where T : Character
         Anim.SetBool(AnimBoolName, false);
     }
 
-    public void SetVelocity(float x, float y)
+    public void SetVelocity(float x, float y, bool isNeedFlip = true)
     {
         Rb.velocity = new Vector2(x, y);
-        Flip.FlipController(x);
+        if (isNeedFlip) Flip.FlipController(x);
     }
 
     public virtual void AnimationFinishTrigger()

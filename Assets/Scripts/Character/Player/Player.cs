@@ -1,6 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(InputController))]
+[RequireComponent(typeof(Damageable))]
 public class Player : Character
 {
     #region Value
@@ -31,6 +32,7 @@ public class Player : Character
 
     #region Component
     public InputController Input { get; private set; }
+    public Damageable damageable { get; private set; }
     #endregion
 
     #region StateMachine
@@ -42,6 +44,8 @@ public class Player : Character
     public IState WallSlideState { get; private set; }
     public IState WallJumpState { get; private set; }
     public IState AttackState { get; private set; }
+    public IState HitState { get; private set; }
+    public IState DeadState { get; private set; }
     #endregion
 
     protected override void Start()
@@ -49,6 +53,12 @@ public class Player : Character
         base.Start();
 
         Input = GetComponent<InputController>();
+        damageable = GetComponent<Damageable>();
+        damageable.onTakeDamage += (from, to) =>
+        {
+            damageFrom = from;
+            Fsm.SwitchState(HitState);
+        };
 
         IdleState = new IdleState(Fsm, this, "Idle");
         MoveState = new MoveState(Fsm, this, "Move");
@@ -58,6 +68,8 @@ public class Player : Character
         WallSlideState = new WallSlideState(Fsm, this, "WallSlide");
         WallJumpState = new WallJumpState(Fsm, this, "Jump");
         AttackState = new AttackState(Fsm, this, "Attack");
+        HitState = new HitState(Fsm, this, "Hit");
+        DeadState = new DeadState(Fsm, this, "Dead");
         Fsm.SwitchState(IdleState);
     }
 

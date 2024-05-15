@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class SkeletonGroundState : SkeletonState
 {
     public SkeletonGroundState(FSM fsm, Skeleton character, string animBoolName) : base(fsm, character, animBoolName)

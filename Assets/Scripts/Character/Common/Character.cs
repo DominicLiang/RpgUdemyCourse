@@ -13,6 +13,11 @@ public class Character : MonoBehaviour
     public Transform attackCheck;
     public float attackCheckRadius;
 
+    [Header("Knockback Value")]
+    public float knockbackXSpeed = 3f;
+    public float knockbackYSpeed = 3f;
+    public GameObject damageFrom;
+
     public Animator Anim { get; private set; }
     public Rigidbody2D Rb { get; private set; }
     public FlipSprite Flip { get; private set; }

@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Damageable))]
 public class Skeleton : Character
 {
     #region Value
@@ -7,6 +8,10 @@ public class Skeleton : Character
     public float attackDistance = 2f;
     public float attackCooldown = 0.4f;
     public float lostPlayerTime = 7f;
+    #endregion
+
+    #region Component
+    public Damageable damageable { get; private set; }
     #endregion
 
     #region State
@@ -21,6 +26,13 @@ public class Skeleton : Character
     protected override void Start()
     {
         base.Start();
+
+        damageable = GetComponent<Damageable>();
+        damageable.onTakeDamage += (from, to) =>
+        {
+            damageFrom = from;
+            Fsm.SwitchState(HitState);
+        };
 
         IdleState = new SkeletonIdleState(Fsm, this, "Idle");
         PatrolState = new SkeletonPatrolState(Fsm, this, "Move");
