@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CharacterState<T> where T : Character
+public class CharacterState<T> : IState where T : Character
 {
     protected float StateTimer { get; set; }
     protected bool IsAnimationFinished { get; set; }
@@ -23,29 +23,30 @@ public class CharacterState<T> where T : Character
         ColDetect = character.ColDetect;
     }
 
-    protected void BaseEnter()
+    public virtual void Enter(IState lastState)
     {
         Anim.SetBool(AnimBoolName, true);
         IsAnimationFinished = false;
     }
 
-    protected void BaseUpdate()
+    public virtual void Update()
     {
         StateTimer -= Time.deltaTime;
     }
-    protected void BaseExit()
+
+    public virtual void Exit(IState newState)
     {
         Anim.SetBool(AnimBoolName, false);
-    }
-
-    public virtual void AnimationFinishTrigger()
-    {
-        IsAnimationFinished = true;
     }
 
     public void SetVelocity(float x, float y)
     {
         Rb.velocity = new Vector2(x, y);
         Flip.FlipController(x);
+    }
+
+    public virtual void AnimationFinishTrigger()
+    {
+        IsAnimationFinished = true;
     }
 }

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class PlayerState : CharacterState<Player>, IState
+public class PlayerState : CharacterState<Player>
 {
     private int airDashCounter;
 
@@ -15,16 +15,16 @@ public class PlayerState : CharacterState<Player>, IState
         Input = character.Input;
     }
 
-    public virtual void Enter(IState lastState)
+    public override void Enter(IState lastState)
     {
-        BaseEnter();
+        base.Enter(lastState);
 
         SetDashDir();
     }
 
-    public virtual void Update()
+    public override void Update()
     {
-        BaseUpdate();
+        base.Update();
 
         dashCooldownTimer -= Time.deltaTime;
 
@@ -47,9 +47,9 @@ public class PlayerState : CharacterState<Player>, IState
         }
     }
 
-    public virtual void Exit(IState newState)
+    public override void Exit(IState newState)
     {
-        BaseExit();
+        base.Exit(newState);
     }
 
     private void SetDashDir()

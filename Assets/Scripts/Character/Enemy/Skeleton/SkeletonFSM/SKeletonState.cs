@@ -8,20 +8,20 @@ public class SkeletonState : CharacterState<Skeleton>, IState
     {
     }
 
-    public virtual void Enter(IState lastState)
+    public override void Enter(IState lastState)
     {
-        BaseEnter();
+        base.Enter(lastState);
     }
 
-    public virtual void Update()
+    public override void Update()
     {
-        BaseUpdate();
+        base.Update();
 
         attackCooldownTimer -= Time.deltaTime;
     }
 
-    public virtual void Exit(IState newState)
+    public override void Exit(IState newState)
     {
-        BaseExit();
+        base.Exit(newState);
     }
 }
