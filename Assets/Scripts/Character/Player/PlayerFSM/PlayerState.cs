@@ -30,14 +30,14 @@ public class PlayerState : CharacterState<Player>, IState
 
         Anim.SetFloat("VelocityY", Rb.velocity.y);
 
-        if (ColDetect.isGrounded)
+        if (ColDetect.IsGrounded)
         {
             airDashCounter = 0;
         }
 
-        if (airDashCounter < Character.airDashCount && dashCooldownTimer <= 0 && !ColDetect.isWallDetected && Input.isDashDown)
+        if (airDashCounter < Character.airDashCount && dashCooldownTimer <= 0 && !ColDetect.IsWallDetected && Input.isDashDown)
         {
-            if (!ColDetect.isGrounded)
+            if (!ColDetect.IsGrounded)
             {
                 airDashCounter++;
             }

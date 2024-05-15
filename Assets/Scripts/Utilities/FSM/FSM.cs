@@ -1,12 +1,12 @@
 public class FSM
 {
-    public IState currentState { get; private set; }
+    public IState CurrentState { get; private set; }
 
     public void SwitchState(IState newState)
     {
-        var lastState = currentState;
+        var lastState = CurrentState;
         lastState?.Exit(newState);
-        currentState = newState;
+        CurrentState = newState;
         newState.Enter(lastState);
     }
 }

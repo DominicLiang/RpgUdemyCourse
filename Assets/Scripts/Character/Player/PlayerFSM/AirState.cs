@@ -2,7 +2,7 @@ public class AirState : PlayerState
 {
     protected static int airJumpCounter;
 
-    public AirState(FSM fsm, Player player, string animBoolName) : base(fsm, player, animBoolName)
+    public AirState(FSM fsm, Player character, string animBoolName) : base(fsm, character, animBoolName)
     {
     }
 

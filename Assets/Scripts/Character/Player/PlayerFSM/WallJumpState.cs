@@ -1,6 +1,6 @@
 public class WallJumpState : AirState
 {
-    public WallJumpState(FSM fsm, Player player, string animBoolName) : base(fsm, player, animBoolName)
+    public WallJumpState(FSM fsm, Player character, string animBoolName) : base(fsm, character, animBoolName)
     {
     }
 

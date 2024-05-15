@@ -1,8 +1,10 @@
 using UnityEngine;
 
-public class SKeletonState : CharacterState<Skeleton>, IState
+public class SkeletonState : CharacterState<Skeleton>, IState
 {
-    public SKeletonState(FSM fsm, Skeleton character, string animBoolName) : base(fsm, character, animBoolName)
+    protected static float attackCooldownTimer;
+
+    public SkeletonState(FSM fsm, Skeleton character, string animBoolName) : base(fsm, character, animBoolName)
     {
     }
 
@@ -14,6 +16,8 @@ public class SKeletonState : CharacterState<Skeleton>, IState
     public virtual void Update()
     {
         BaseUpdate();
+
+        attackCooldownTimer -= Time.deltaTime;
     }
 
     public virtual void Exit(IState newState)

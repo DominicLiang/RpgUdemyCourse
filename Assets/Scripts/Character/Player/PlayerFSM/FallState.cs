@@ -1,6 +1,6 @@
 public class FallState : AirState
 {
-    public FallState(FSM fsm, Player player, string animBoolName) : base(fsm, player, animBoolName)
+    public FallState(FSM fsm, Player character, string animBoolName) : base(fsm, character, animBoolName)
     {
     }
 
@@ -13,12 +13,12 @@ public class FallState : AirState
     {
         base.Update();
 
-        if (ColDetect.isWallDetected)
+        if (ColDetect.IsWallDetected)
         {
             Fsm.SwitchState(Character.WallSlideState);
         }
 
-        if (ColDetect.isGrounded)
+        if (ColDetect.IsGrounded)
         {
             Fsm.SwitchState(Character.IdleState);
             airJumpCounter = 0;

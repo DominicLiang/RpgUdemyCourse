@@ -1,6 +1,6 @@
 public class GroundState : PlayerState
 {
-    public GroundState(FSM fsm, Player player, string animBoolName) : base(fsm, player, animBoolName)
+    public GroundState(FSM fsm, Player character, string animBoolName) : base(fsm, character, animBoolName)
     {
     }
 
@@ -18,12 +18,12 @@ public class GroundState : PlayerState
             Fsm.SwitchState(Character.AttackState);
         }
 
-        if (Input.isJumpDown && ColDetect.isGrounded)
+        if (Input.isJumpDown && ColDetect.IsGrounded)
         {
             Fsm.SwitchState(Character.JumpState);
         }
 
-        if (!ColDetect.isGrounded)
+        if (!ColDetect.IsGrounded)
         {
             Fsm.SwitchState(Character.FallState);
         }

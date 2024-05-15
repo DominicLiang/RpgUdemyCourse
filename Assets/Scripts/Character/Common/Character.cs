@@ -9,6 +9,10 @@ public class Character : MonoBehaviour
     [Header("Move Value")]
     public float moveSpeed = 7f;
 
+    [Header("Attack Colider")]
+    public Transform attackCheck;
+    public float attackCheckRadius;
+
     public Animator Anim { get; private set; }
     public Rigidbody2D Rb { get; private set; }
     public FlipSprite Flip { get; private set; }
@@ -28,6 +32,11 @@ public class Character : MonoBehaviour
 
     protected virtual void Update()
     {
-        Fsm.currentState?.Update();
+        Fsm.CurrentState?.Update();
+    }
+
+    protected virtual void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(attackCheck.position, attackCheckRadius);
     }
 }

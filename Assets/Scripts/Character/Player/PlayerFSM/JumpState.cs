@@ -1,6 +1,6 @@
 public class JumpState : AirState
 {
-    public JumpState(FSM fsm, Player player, string animBoolName) : base(fsm, player, animBoolName)
+    public JumpState(FSM fsm, Player character, string animBoolName) : base(fsm, character, animBoolName)
     {
     }
 
@@ -13,7 +13,7 @@ public class JumpState : AirState
             return;
         }
 
-        if (!ColDetect.isGrounded)
+        if (!ColDetect.IsGrounded)
         {
             airJumpCounter++;
         }

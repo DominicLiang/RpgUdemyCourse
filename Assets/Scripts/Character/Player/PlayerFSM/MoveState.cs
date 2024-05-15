@@ -1,6 +1,6 @@
 public class MoveState : GroundState
 {
-    public MoveState(FSM fsm, Player player, string animBoolName) : base(fsm, player, animBoolName)
+    public MoveState(FSM fsm, Player character, string animBoolName) : base(fsm, character, animBoolName)
     {
     }
 

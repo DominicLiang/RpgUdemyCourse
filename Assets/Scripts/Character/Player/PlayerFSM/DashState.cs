@@ -1,6 +1,6 @@
 public class DashState : PlayerState
 {
-    public DashState(FSM fsm, Player player, string animBoolName) : base(fsm, player, animBoolName)
+    public DashState(FSM fsm, Player character, string animBoolName) : base(fsm, character, animBoolName)
     {
     }
 
@@ -14,7 +14,7 @@ public class DashState : PlayerState
     {
         base.Update();
 
-        if (!ColDetect.isGrounded && ColDetect.isWallDetected)
+        if (!ColDetect.IsGrounded && ColDetect.IsWallDetected)
         {
             Fsm.SwitchState(Character.WallSlideState);
         }

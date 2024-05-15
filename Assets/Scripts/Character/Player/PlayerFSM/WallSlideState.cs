@@ -1,6 +1,6 @@
 public class WallSlideState : PlayerState
 {
-    public WallSlideState(FSM fsm, Player player, string animBoolName) : base(fsm, player, animBoolName)
+    public WallSlideState(FSM fsm, Player character, string animBoolName) : base(fsm, character, animBoolName)
     {
     }
 
@@ -16,7 +16,7 @@ public class WallSlideState : PlayerState
         SetVelocity(0, Input.yAxis < 0 ? Rb.velocity.y : Rb.velocity.y * Character.slideSpeed);
 
         var x = Input.xAxis == 0 ? 0 : Input.xAxis > 0 ? 1 : -1;
-        if (ColDetect.isGrounded || (Input.xAxis != 0 && Flip.facingDir != x))
+        if (ColDetect.IsGrounded || (Input.xAxis != 0 && Flip.facingDir != x))
         {
             Fsm.SwitchState(Character.IdleState);
         }

@@ -38,7 +38,7 @@ public class CharacterState<T> where T : Character
         Anim.SetBool(AnimBoolName, false);
     }
 
-    public void AnimationFinishTrigger()
+    public virtual void AnimationFinishTrigger()
     {
         IsAnimationFinished = true;
     }
@@ -46,6 +46,6 @@ public class CharacterState<T> where T : Character
     public void SetVelocity(float x, float y)
     {
         Rb.velocity = new Vector2(x, y);
-        Flip.Flip(x);
+        Flip.FlipController(x);
     }
 }

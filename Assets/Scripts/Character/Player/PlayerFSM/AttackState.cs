@@ -5,7 +5,7 @@ public class AttackState : PlayerState
     private float lastAttackTime;
     private int comboCounter;
 
-    public AttackState(FSM fsm, Player player, string animBoolName) : base(fsm, player, animBoolName)
+    public AttackState(FSM fsm, Player character, string animBoolName) : base(fsm, character, animBoolName)
     {
     }
 
@@ -41,7 +41,7 @@ public class AttackState : PlayerState
             Fsm.SwitchState(Character.IdleState);
         }
 
-        if (!ColDetect.isGrounded)
+        if (!ColDetect.IsGrounded)
         {
             Fsm.SwitchState(Character.FallState);
         }

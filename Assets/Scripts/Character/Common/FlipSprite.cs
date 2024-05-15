@@ -6,23 +6,23 @@ public class FlipSprite : MonoBehaviour
     public int facingDir = 1;
     public bool isFacingRight = true;
 
-    public void Flip(float x)
+    public void FlipController(float x)
     {
         if (x > 0 && !isFacingRight)
         {
-            FlipTheSprite();
+            Flip();
         }
         else if (x < 0 && isFacingRight)
         {
-            FlipTheSprite();
+            Flip();
         }
+    }
 
-        void FlipTheSprite()
-        {
-            isFacingRight = !isFacingRight;
-            facingDir = isFacingRight ? 1 : -1;
-            transform.Rotate(0, 180, 0);
-        }
+    public void Flip()
+    {
+        isFacingRight = !isFacingRight;
+        facingDir = isFacingRight ? 1 : -1;
+        transform.Rotate(0, 180, 0);
     }
 
     [InspectorButton("朝向右的初始值")]
