@@ -28,6 +28,9 @@ public class Player : Character
         new Vector2(2,0),
         new Vector2(5,0),
     };
+
+    [Header("Counter Value")]
+    public float counterDuration = 0.2f;
     #endregion
 
     #region Component
@@ -46,6 +49,7 @@ public class Player : Character
     public IState AttackState { get; private set; }
     public IState HitState { get; private set; }
     public IState DeadState { get; private set; }
+    public IState CounterState { get; private set; }
     #endregion
 
     protected override void Start()
@@ -70,6 +74,7 @@ public class Player : Character
         AttackState = new AttackState(Fsm, this, "Attack");
         HitState = new HitState(Fsm, this, "Hit");
         DeadState = new DeadState(Fsm, this, "Dead");
+        CounterState = new CounterState(Fsm, this, "Counter");
         Fsm.SwitchState(IdleState);
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -20,14 +21,28 @@ public class FlashFX : MonoBehaviour
     // 大坑，一样的东西，用task就是无效，修改材质一定要用协程
     // Task.Run(async () =>
     // {
-    //     renderer.material.SetInt("_Flash", 1);
+    //     render.material.SetInt("_Flash", 1);
     //     await Task.Delay((int)0.1f * 1000);
-    //     renderer.material.SetInt("_Flash", 0);
+    //     render.material.SetInt("_Flash", 0);
     // });
     IEnumerator Flash()
     {
-        render.material.SetInt("_Flash", 1);
+        render.material.SetColor("_Color", Color.white);
+        render.material.SetInt("_Flash", Convert.ToInt32(true));
         yield return new WaitForSeconds(flashTime);
-        render.material.SetInt("_Flash", 0);
+        render.material.SetInt("_Flash", Convert.ToInt32(false));
+    }
+
+    public void RedBlink()
+    {
+        render.material.SetColor("_Color", Color.red);
+        var boolen = Convert.ToBoolean(render.material.GetInt("_Flash"));
+        render.material.SetInt("_Flash", Convert.ToInt32(!boolen));
+    }
+
+    public void Reset()
+    {
+        CancelInvoke(nameof(RedBlink));
+        render.material.SetInt("_Flash", Convert.ToInt32(false));
     }
 }

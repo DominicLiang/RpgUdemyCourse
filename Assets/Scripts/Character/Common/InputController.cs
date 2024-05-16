@@ -9,14 +9,17 @@ public class InputController : MonoBehaviour
     public bool isJumpDown = false;
     public bool isDashDown = false;
     public bool isAttackDown = false;
+    public bool isCounterDown = false;
     public bool isJumpPressed = false;
     public bool isDashPressed = false;
     public bool isAttackPressed = false;
+    public bool isCounterPressed = false;
 
     private InputAction movementInput;
     private InputAction jumpInput;
     private InputAction dashInput;
     private InputAction attackInput;
+    private InputAction counterInput;
 
     private void Start()
     {
@@ -25,6 +28,7 @@ public class InputController : MonoBehaviour
         jumpInput = input.actions.FindAction("Jump", true);
         dashInput = input.actions.FindAction("Dash", true);
         attackInput = input.actions.FindAction("Attack", true);
+        counterInput = input.actions.FindAction("Counter", true);
     }
 
     private void Update()
@@ -36,8 +40,10 @@ public class InputController : MonoBehaviour
         isJumpDown = jumpInput.triggered;
         isDashDown = dashInput.triggered;
         isAttackDown = attackInput.triggered;
+        isCounterDown = counterInput.triggered;
         isJumpPressed = jumpInput.IsPressed();
         isDashPressed = dashInput.IsPressed();
         isAttackPressed = attackInput.IsPressed();
+        isCounterPressed = counterInput.IsPressed();
     }
 }

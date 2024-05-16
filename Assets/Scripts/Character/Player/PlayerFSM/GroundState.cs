@@ -13,7 +13,12 @@ public class GroundState : PlayerState
     {
         base.Update();
 
-        if (Input.isAttackPressed)
+        if (Input.isCounterDown && ColDetect.IsGrounded)
+        {
+            Fsm.SwitchState(Character.CounterState);
+        }
+
+        if (Input.isAttackPressed && ColDetect.IsGrounded)
         {
             Fsm.SwitchState(Character.AttackState);
         }

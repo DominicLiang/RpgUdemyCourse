@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AnimationTrigger<T> : MonoBehaviour where T : Character
 {
-    private T character;
+    protected T character;
 
     private void Start()
     {

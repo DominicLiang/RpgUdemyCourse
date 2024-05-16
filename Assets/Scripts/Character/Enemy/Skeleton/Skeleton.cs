@@ -1,6 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Damageable))]
+[RequireComponent(typeof(FlashFX))]
 public class Skeleton : Character
 {
     #region Value
@@ -8,10 +9,16 @@ public class Skeleton : Character
     public float attackDistance = 2f;
     public float attackCooldown = 0.4f;
     public float lostPlayerTime = 7f;
+
+    [Header("Stun Value")]
+    public float stunTime = 2f;
+    public bool canBeStun = true;
+    public GameObject counterImage;
     #endregion
 
     #region Component
-    public Damageable damageable { get; private set; }
+    public Damageable Damageable { get; private set; }
+    public FlashFX FlashFX { get; private set; }
     #endregion
 
     #region State
@@ -21,18 +28,23 @@ public class Skeleton : Character
     public IState AttackState { get; private set; }
     public IState HitState { get; private set; }
     public IState DeadState { get; private set; }
+    public IState StunState { get; private set; }
     #endregion
 
     protected override void Start()
     {
         base.Start();
 
-        damageable = GetComponent<Damageable>();
-        damageable.onTakeDamage += (from, to) =>
+        Damageable = GetComponent<Damageable>();
+        FlashFX = GetComponent<FlashFX>();
+
+        Damageable.onTakeDamage += (from, to) =>
         {
             damageFrom = from;
             Fsm.SwitchState(HitState);
         };
+
+        counterImage = transform.Find("CounterImage").gameObject;
 
         IdleState = new SkeletonIdleState(Fsm, this, "Idle");
         PatrolState = new SkeletonPatrolState(Fsm, this, "Move");
@@ -40,11 +52,38 @@ public class Skeleton : Character
         AttackState = new SkeletonAttackState(Fsm, this, "Attack");
         HitState = new SkeletonHitState(Fsm, this, "Hit");
         DeadState = new SkeletonDeadState(Fsm, this, "Dead");
+        StunState = new SkeletonStunState(Fsm, this, "Stun");
         Fsm.SwitchState(IdleState);
     }
 
     protected override void Update()
     {
         base.Update();
+    }
+
+    public virtual void OpenCounterAttackWindow()
+    {
+        canBeStun = true;
+        counterImage.SetActive(true);
+    }
+
+    public virtual void CloseCounterAttackWindow()
+    {
+        canBeStun = false;
+        counterImage.SetActive(false);
+    }
+
+    public virtual bool CanBeStun()
+    {
+        if (canBeStun)
+        {
+            Fsm.SwitchState(StunState);
+            CloseCounterAttackWindow();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
