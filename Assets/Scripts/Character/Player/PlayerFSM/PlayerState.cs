@@ -5,7 +5,6 @@ public class PlayerState : CharacterState<Player>
 {
     private int airDashCounter;
 
-    protected static float dashCooldownTimer;
     protected static bool isBusy;
     protected float dashDir;
     protected InputController Input { get; private set; }
@@ -26,8 +25,6 @@ public class PlayerState : CharacterState<Player>
     {
         base.Update();
 
-        dashCooldownTimer -= Time.deltaTime;
-
         Anim.SetFloat("VelocityY", Rb.velocity.y);
 
         if (ColDetect.IsGrounded)
@@ -35,7 +32,10 @@ public class PlayerState : CharacterState<Player>
             airDashCounter = 0;
         }
 
-        if (airDashCounter < Character.airDashCount && dashCooldownTimer <= 0 && !ColDetect.IsWallDetected && Input.isDashDown)
+        if (Input.isDashDown
+            && airDashCounter < Character.airDashCount
+            && SkillManager.Instance.Dash.CanUseSkill()
+            && !ColDetect.IsWallDetected)
         {
             if (!ColDetect.IsGrounded)
             {
@@ -43,7 +43,6 @@ public class PlayerState : CharacterState<Player>
             }
             SetDashDir();
             Fsm.SwitchState(Character.DashState);
-            dashCooldownTimer = Character.dashCooldown;
         }
     }
 

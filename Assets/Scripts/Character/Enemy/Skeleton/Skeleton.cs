@@ -41,6 +41,18 @@ public class Skeleton : Character
         Damageable.onTakeDamage += (from, to) =>
         {
             damageFrom = from;
+            if (Fsm.CurrentState == StunState)
+            {
+                if (damageFrom)
+                {
+                    var isRight = damageFrom.transform.position.x > transform.position.x;
+                    var isLeft = damageFrom.transform.position.x < transform.position.x;
+                    var faceDir = isRight ? 1 : isLeft ? -1 : 0;
+                    Rb.velocity = new Vector2(faceDir * -1 * knockbackXSpeed, knockbackYSpeed);
+                    if (faceDir != 0 && faceDir != Flip.facingDir) Flip.Flip();
+                }
+                return;
+            }
             Fsm.SwitchState(HitState);
         };
 
