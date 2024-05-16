@@ -12,7 +12,7 @@ public class PlayerState : CharacterState<Player>
 
     public PlayerState(FSM fsm, Player character, string animBoolName) : base(fsm, character, animBoolName)
     {
-        Input = character.Input;
+        Input = character.InputController;
     }
 
     public override void Enter(IState lastState)

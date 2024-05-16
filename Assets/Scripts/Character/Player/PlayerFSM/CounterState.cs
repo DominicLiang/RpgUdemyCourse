@@ -33,6 +33,9 @@ public class CounterState : PlayerState
             {
                 StateTimer = 10;
                 Anim.SetBool("CounterSuccess", true);
+                var damageable = hit.GetComponent<Damageable>();
+                if (!damageable) continue;
+                damageable.TakeDamage(Character.gameObject, damageable.gameObject, 1);
             }
         }
 

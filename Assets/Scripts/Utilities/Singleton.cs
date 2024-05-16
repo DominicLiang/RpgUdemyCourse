@@ -5,7 +5,7 @@ public abstract class Singleton<T> where T : new()
     {
         get
         {
-            if (instance == null) instance = new T();
+            instance ??= new T();
             return instance;
         }
     }

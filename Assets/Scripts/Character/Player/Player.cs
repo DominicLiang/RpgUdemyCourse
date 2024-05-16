@@ -1,3 +1,4 @@
+using Cinemachine;
 using UnityEngine;
 
 [RequireComponent(typeof(InputController))]
@@ -34,8 +35,8 @@ public class Player : Character
     #endregion
 
     #region Component
-    public InputController Input { get; private set; }
-    public Damageable damageable { get; private set; }
+    public InputController InputController { get; private set; }
+    public Damageable Damageable { get; private set; }
     #endregion
 
     #region StateMachine
@@ -56,9 +57,9 @@ public class Player : Character
     {
         base.Start();
 
-        Input = GetComponent<InputController>();
-        damageable = GetComponent<Damageable>();
-        damageable.onTakeDamage += (from, to) =>
+        InputController = GetComponent<InputController>();
+        Damageable = GetComponent<Damageable>();
+        Damageable.onTakeDamage += (from, to) =>
         {
             damageFrom = from;
             Fsm.SwitchState(HitState);

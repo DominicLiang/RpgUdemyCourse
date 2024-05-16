@@ -1,4 +1,5 @@
 using System;
+using Cinemachine;
 using UnityEngine;
 
 public class Damageable : MonoBehaviour
@@ -9,5 +10,8 @@ public class Damageable : MonoBehaviour
     {
         Debug.Log($"{to} take {damage} damage!");
         onTakeDamage?.Invoke(from, to);
+
+        AttackSense.Instance.HitPause(0.1f);
+        AttackSense.Instance.GetComponent<CinemachineImpulseSource>().GenerateImpulse();
     }
 }
