@@ -13,29 +13,46 @@ public class GroundState : PlayerState
     {
         base.Update();
 
-        if (Input.isCounterDown && ColDetect.IsGrounded)
-        {
-            Fsm.SwitchState(Character.CounterState);
-        }
-
-        if (Input.isAttackPressed && ColDetect.IsGrounded)
-        {
-            Fsm.SwitchState(Character.AttackState);
-        }
-
-        if (Input.isJumpDown && ColDetect.IsGrounded)
-        {
-            Fsm.SwitchState(Character.JumpState);
-        }
-
         if (!ColDetect.IsGrounded)
         {
             Fsm.SwitchState(Character.FallState);
+            return;
+        }
+
+        if (Input.isJumpDown)
+        {
+            Fsm.SwitchState(Character.JumpState);
+            return;
+        }
+
+        if (Input.isAttackPressed)
+        {
+            Fsm.SwitchState(Character.AttackState);
+            return;
+        }
+
+        if (Input.isCounterDown)
+        {
+            Fsm.SwitchState(Character.CounterState);
+            return;
+        }
+
+        if (Input.isAimSwordDown && CanReturnSword())
+        {
+            Fsm.SwitchState(Character.AimSwordState);
+            return;
         }
     }
 
     public override void Exit(IState newState)
     {
         base.Exit(newState);
+    }
+
+    private bool CanReturnSword()
+    {
+        if (!Character.UsedSword) return true;
+        Character.UsedSword.GetComponent<SwordSKillController>().ReturnSword();
+        return false;
     }
 }

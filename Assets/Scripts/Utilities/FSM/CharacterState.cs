@@ -42,7 +42,8 @@ public class CharacterState<T> : IState where T : Character
     public void SetVelocity(float x, float y, bool isNeedFlip = true)
     {
         Rb.velocity = new Vector2(x, y);
-        if (isNeedFlip) Flip.FlipController(x);
+        if (!isNeedFlip) return;
+        Flip.FlipController(x);
     }
 
     public virtual void AnimationFinishTrigger()

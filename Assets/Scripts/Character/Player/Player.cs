@@ -1,4 +1,3 @@
-using Cinemachine;
 using UnityEngine;
 
 [RequireComponent(typeof(InputController))]
@@ -9,6 +8,8 @@ public class Player : Character
     [Header("Jump Value")]
     public float jumpForce = 20f;
     public int airJumpCount = 1;
+    public float swordReturnImpact = 3f;
+    public GameObject UsedSword;
 
     [Header("Dash Value")]
     public float dashSpeed = 25f;
@@ -51,6 +52,8 @@ public class Player : Character
     public IState HitState { get; private set; }
     public IState DeadState { get; private set; }
     public IState CounterState { get; private set; }
+    public IState AimSwordState { get; private set; }
+    public IState CatchSwordState { get; private set; }
     #endregion
 
     protected override void Start()
@@ -76,11 +79,19 @@ public class Player : Character
         HitState = new HitState(Fsm, this, "Hit");
         DeadState = new DeadState(Fsm, this, "Dead");
         CounterState = new CounterState(Fsm, this, "Counter");
+        AimSwordState = new AimSwordState(Fsm, this, "AimSword");
+        CatchSwordState = new CatchSwordState(Fsm, this, "CatchSword");
         Fsm.SwitchState(IdleState);
     }
 
     protected override void Update()
     {
         base.Update();
+    }
+
+    public void CatchSword()
+    {
+        Fsm.SwitchState(CatchSwordState);
+        Destroy(UsedSword);
     }
 }
