@@ -9,6 +9,8 @@ public class DashState : PlayerState
         base.Enter(lastState);
 
         StateTimer = Character.dashDuration;
+
+        SkillManager.Instance.Clone.CreateClone(Character.transform.position, Character.transform.rotation);
     }
     public override void Update()
     {

@@ -17,9 +17,9 @@ public class AnimationTrigger<T> : MonoBehaviour where T : Character
 
     private void AttackTrigger()
     {
-        Collider2D[] coliders = Physics2D.OverlapCircleAll(character.attackCheck.position, character.attackCheckRadius);
+        var colliders = Physics2D.OverlapCircleAll(character.attackCheck.position, character.attackCheckRadius);
 
-        foreach (var hit in coliders)
+        foreach (var hit in colliders)
         {
             if (hit.transform == transform.parent) continue;
             var damageable = hit.GetComponent<Damageable>();
