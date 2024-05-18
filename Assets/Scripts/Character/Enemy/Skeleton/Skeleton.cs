@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Damageable))]
@@ -5,6 +6,10 @@ using UnityEngine;
 public class Skeleton : Character
 {
     #region Value
+    [Header("Move Value")]
+    public float defaultMoveSpeed = 7f;
+    [HideInInspector] public float moveSpeed;
+
     [Header("Attack Value")]
     public float attackDistance = 2f;
     public float attackCooldown = 0.4f;
@@ -13,7 +18,7 @@ public class Skeleton : Character
     [Header("Stun Value")]
     public float stunTime = 2f;
     public bool canBeStun = true;
-    public GameObject counterImage;
+    [HideInInspector] public GameObject counterImage;
     #endregion
 
     #region Component
@@ -34,6 +39,8 @@ public class Skeleton : Character
     protected override void Start()
     {
         base.Start();
+
+        moveSpeed = defaultMoveSpeed;
 
         Damageable = GetComponent<Damageable>();
         FlashFX = GetComponent<FlashFX>();
@@ -71,6 +78,32 @@ public class Skeleton : Character
     protected override void Update()
     {
         base.Update();
+    }
+
+    public void FreezeTimeForSeconds(float seconds)
+    {
+        StartCoroutine(FreezeTimeFor(seconds));
+    }
+
+    protected virtual IEnumerator FreezeTimeFor(float seconds)
+    {
+        FreezeTime(true);
+        yield return new WaitForSeconds(seconds);
+        FreezeTime(true);
+    }
+
+    public virtual void FreezeTime(bool toggle)
+    {
+        if (toggle)
+        {
+            moveSpeed = 0;
+            Anim.speed = 0;
+        }
+        else
+        {
+            moveSpeed = defaultMoveSpeed;
+            Anim.speed = 1;
+        }
     }
 
     public virtual void OpenCounterAttackWindow()

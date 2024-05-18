@@ -5,6 +5,9 @@ using UnityEngine;
 public class Player : Character
 {
     #region Value
+    [Header("Move Value")]
+    public float moveSpeed = 7f;
+
     [Header("Jump Value")]
     public float jumpForce = 20f;
     public int airJumpCount = 1;

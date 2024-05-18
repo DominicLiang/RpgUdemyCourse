@@ -6,9 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(CollisionDetection))]
 public class Character : MonoBehaviour
 {
-    [Header("Move Value")]
-    public float moveSpeed = 7f;
-
     [Header("Attack Colider")]
     public Transform attackCheck;
     public float attackCheckRadius;

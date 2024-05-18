@@ -45,4 +45,5 @@ public class FlashFX : MonoBehaviour
         CancelInvoke(nameof(RedBlink));
         render.material.SetInt("_Flash", Convert.ToInt32(false));
     }
+
 }
