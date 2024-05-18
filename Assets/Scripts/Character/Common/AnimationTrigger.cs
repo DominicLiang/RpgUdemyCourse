@@ -24,7 +24,7 @@ public class AnimationTrigger<T> : MonoBehaviour where T : Character
             if (hit.transform == transform.parent) continue;
             var damageable = hit.GetComponent<Damageable>();
             if (!damageable) continue;
-            damageable.TakeDamage(gameObject, damageable.gameObject, 1);
+            damageable.TakeDamage(transform.parent.gameObject, damageable.gameObject, 1);
         }
     }
 }

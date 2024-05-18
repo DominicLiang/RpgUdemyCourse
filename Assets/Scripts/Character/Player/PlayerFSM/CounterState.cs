@@ -26,17 +26,14 @@ public class CounterState : PlayerState
 
         foreach (var hit in coliders)
         {
-            if (hit.transform == Character.transform) continue;
-            var enemy = hit.GetComponent<Skeleton>();
-            if (!enemy) continue;
-            if (enemy.CanBeStun())
-            {
-                StateTimer = 10;
-                Anim.SetBool("CounterSuccess", true);
-                var damageable = hit.GetComponent<Damageable>();
-                if (!damageable) continue;
-                damageable.TakeDamage(Character.gameObject, damageable.gameObject, 1);
-            }
+            if (!hit.CompareTag("Enemy")) continue;
+            var enemy = hit.GetComponent<Enemy>();
+            if (!enemy || !enemy.CanBeStun()) continue;
+            StateTimer = 10;
+            Anim.SetBool("CounterSuccess", true);
+            var damageable = hit.GetComponent<Damageable>();
+            if (!damageable) continue;
+            damageable.TakeDamage(Character.gameObject, damageable.gameObject, 1);
         }
 
         if (StateTimer < 0 || IsAnimationFinished)

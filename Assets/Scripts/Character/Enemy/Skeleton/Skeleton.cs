@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class Skeleton : Enemy
@@ -17,24 +16,6 @@ public class Skeleton : Enemy
     {
         base.Start();
 
-        Damageable.onTakeDamage += (from, to) =>
-        {
-            damageFrom = from;
-            if (Fsm.CurrentState == StunState)
-            {
-                if (damageFrom)
-                {
-                    var isRight = damageFrom.transform.position.x > transform.position.x;
-                    var isLeft = damageFrom.transform.position.x < transform.position.x;
-                    var faceDir = isRight ? 1 : isLeft ? -1 : 0;
-                    Rb.velocity = new Vector2(faceDir * -1 * knockbackXSpeed, knockbackYSpeed);
-                    if (faceDir != 0 && faceDir != Flip.facingDir) Flip.Flip();
-                }
-                return;
-            }
-            Fsm.SwitchState(HitState);
-        };
-
         IdleState = new SkeletonIdleState(Fsm, this, "Idle");
         PatrolState = new SkeletonPatrolState(Fsm, this, "Move");
         ChaseState = new SkeletonChaseState(Fsm, this, "Move");
@@ -50,17 +31,19 @@ public class Skeleton : Enemy
         base.Update();
     }
 
-    public virtual bool CanBeStun()
+    protected override void SwitchHitState()
     {
-        if (canBeStun)
-        {
-            Fsm.SwitchState(StunState);
-            CloseCounterAttackWindow();
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        Fsm.SwitchState(HitState);
+    }
+
+    protected override void SwitchStunState()
+    {
+        Fsm.SwitchState(StunState);
+    }
+
+    protected override bool IsInStunState()
+    {
+        // Debug.Log(Fsm.CurrentState == StunState);
+        return Fsm.CurrentState == StunState;
     }
 }

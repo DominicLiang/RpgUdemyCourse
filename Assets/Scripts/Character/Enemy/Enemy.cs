@@ -3,7 +3,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Damageable))]
 [RequireComponent(typeof(FlashFX))]
-public class Enemy : Character
+public abstract class Enemy : Character
 {
     #region Value
     [Header("Move Value")]
@@ -18,7 +18,7 @@ public class Enemy : Character
     [Header("Stun Value")]
     public float stunTime = 2f;
     public bool canBeStun = true;
-    [HideInInspector] public GameObject counterImage;
+    public GameObject counterImage;
     #endregion
 
     #region Component
@@ -35,7 +35,20 @@ public class Enemy : Character
         Damageable = GetComponent<Damageable>();
         FlashFX = GetComponent<FlashFX>();
 
-        counterImage = transform.Find("CounterImage").gameObject;
+        Damageable.onTakeDamage += (from, to) =>
+        {
+            damageFrom = from;
+            if (damageFrom.CompareTag("Player") && IsInStunState())
+            {
+                var isRight = damageFrom.transform.position.x > transform.position.x;
+                var isLeft = damageFrom.transform.position.x < transform.position.x;
+                var faceDir = isRight ? 1 : isLeft ? -1 : 0;
+                Rb.velocity = new Vector2(faceDir * -1 * knockbackXSpeed, knockbackYSpeed);
+                if (faceDir != 0 && faceDir != Flip.facingDir) Flip.Flip();
+                return;
+            }
+            SwitchHitState();
+        };
     }
 
     public void FreezeTimeForSeconds(float seconds)
@@ -75,4 +88,24 @@ public class Enemy : Character
         canBeStun = false;
         counterImage.SetActive(false);
     }
+
+    public virtual bool CanBeStun()
+    {
+        if (canBeStun)
+        {
+            SwitchStunState();
+            CloseCounterAttackWindow();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    protected abstract bool IsInStunState();
+
+    protected abstract void SwitchHitState();
+
+    protected abstract void SwitchStunState();
 }
