@@ -4,7 +4,7 @@ public abstract class Skill : MonoBehaviour
 {
     public float cooldown;
     protected Player player;
-    private float cooldownTimer;
+    protected float cooldownTimer;
 
     protected virtual void Start()
     {
@@ -25,4 +25,22 @@ public abstract class Skill : MonoBehaviour
     }
 
     protected abstract void SkillFunction();
+
+    protected virtual Transform FindClosestEnemy(Transform detectTransform, float radius)
+    {
+        var collider = Physics2D.OverlapCircleAll(detectTransform.position, radius);
+
+        var closeDis = Mathf.Infinity;
+
+        Transform closeEnemy = null;
+        foreach (var hit in collider)
+        {
+            if (!hit.CompareTag("Enemy")) continue;
+            var disToEnemy = Vector2.Distance(detectTransform.position, hit.transform.position);
+            if (disToEnemy >= closeDis) continue;
+            closeDis = disToEnemy;
+            closeEnemy = hit.transform;
+        }
+        return closeEnemy;
+    }
 }

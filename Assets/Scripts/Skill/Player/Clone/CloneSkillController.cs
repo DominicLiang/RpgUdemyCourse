@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CloneSkillController : MonoBehaviour
@@ -5,9 +6,11 @@ public class CloneSkillController : MonoBehaviour
     [SerializeField] private Transform attackCheck;
     [SerializeField] private float attackCheckRadius;
 
+    private float attackDelayTimer;
     private float cloneDuration;
     private Color cloneColor;
     private float cloneTimer;
+    private Func<Transform, float, Transform> findClosestEnemy;
     private Transform closeEnemy;
     private Animator anim;
     private SpriteRenderer sr;
@@ -18,9 +21,40 @@ public class CloneSkillController : MonoBehaviour
         sr = GetComponentInChildren<SpriteRenderer>();
     }
 
+    public void Setup(
+        Vector3 position,
+        Quaternion rotation,
+        float cloneDuration,
+        Color cloneColor,
+        bool canAttack,
+        Vector3 offset,
+        float attackDelay,
+        Func<Transform, float, Transform> findClosestEnemy)
+    {
+        cloneTimer = cloneDuration;
+        this.cloneDuration = cloneDuration;
+        this.cloneColor = cloneColor;
+        this.findClosestEnemy = findClosestEnemy;
+
+        if (canAttack)// todo 延迟攻击
+            attackDelayTimer = attackDelay;
+
+
+        var pos = position + offset;
+
+        PositionRotationSetup(pos, rotation);
+    }
+
     private void Update()
     {
         cloneTimer -= Time.deltaTime;
+        attackDelayTimer -= Time.deltaTime;
+
+        if (attackDelayTimer < 0)
+        {
+            attackDelayTimer = Mathf.Infinity;
+            anim.SetInteger("AttackNumber", UnityEngine.Random.Range(1, 3));
+        }
 
         if (cloneTimer < 0)
         {
@@ -31,26 +65,6 @@ public class CloneSkillController : MonoBehaviour
             cloneColor.a = cloneTimer / cloneDuration;
             sr.color = cloneColor;
         }
-    }
-
-    public void Setup(
-        Vector3 position,
-        Quaternion rotation,
-        float cloneDuration,
-        Color cloneColor,
-        bool canAttack,
-        Vector3 offset)
-    {
-        cloneTimer = cloneDuration;
-        this.cloneDuration = cloneDuration;
-        this.cloneColor = cloneColor;
-
-        if (canAttack)
-            anim.SetInteger("AttackNumber", Random.Range(1, 3));
-
-        var pos = position + offset;
-
-        PositionRotationSetup(pos, rotation);
     }
 
     public void AnimationFinishTrigger()
@@ -75,18 +89,7 @@ public class CloneSkillController : MonoBehaviour
     {
         transform.position = position;
 
-        var collider = Physics2D.OverlapCircleAll(transform.position, 3);
-
-        var closeDis = Mathf.Infinity;
-
-        foreach (var hit in collider)
-        {
-            if (!hit.CompareTag("Enemy")) continue;
-            var disToEnemy = Vector2.Distance(transform.position, hit.transform.position);
-            if (disToEnemy >= closeDis) continue;
-            closeDis = disToEnemy;
-            closeEnemy = hit.transform;
-        }
+        closeEnemy = findClosestEnemy.Invoke(transform, 3f);
 
         if (!closeEnemy)
         {

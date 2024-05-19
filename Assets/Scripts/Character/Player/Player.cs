@@ -92,6 +92,9 @@ public class Player : Character
     protected override void Update()
     {
         base.Update();
+
+        if (Input.GetKeyDown(KeyCode.Q))
+            SkillManager.Instance.Crystal.CanUseSkill();
     }
 
     public void CatchSword()
