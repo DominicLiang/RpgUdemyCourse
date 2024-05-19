@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CounterState : PlayerState
 {
+    private bool canCreateClone;
+
     public CounterState(FSM fsm, Player character, string animBoolName) : base(fsm, character, animBoolName)
     {
     }
@@ -11,6 +11,8 @@ public class CounterState : PlayerState
     public override void Enter(IState lastState)
     {
         base.Enter(lastState);
+
+        canCreateClone = true;
 
         StateTimer = Character.counterDuration;
         Anim.SetBool("CounterSuccess", false);
@@ -27,10 +29,20 @@ public class CounterState : PlayerState
         foreach (var hit in coliders)
         {
             if (!hit.CompareTag("Enemy")) continue;
+
             var enemy = hit.GetComponent<Enemy>();
+
             if (!enemy || !enemy.CanBeStun()) continue;
+
             StateTimer = 10;
             Anim.SetBool("CounterSuccess", true);
+
+            if (canCreateClone)
+            {
+                SkillManager.Instance.Clone.CreateCloneOnCounterAttack(hit.transform);
+                canCreateClone = false;
+            }
+
             var damageable = hit.GetComponent<Damageable>();
             if (!damageable) continue;
             damageable.TakeDamage(Character.gameObject, damageable.gameObject, 1);

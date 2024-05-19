@@ -9,6 +9,10 @@ public class CloneSkill : Skill
     [SerializeField] private bool canAttack;
     [SerializeField] private float attackDelay;
 
+    [SerializeField] private bool createCloneOnDashStart;
+    [SerializeField] private bool createCloneOnDashOver;
+    [SerializeField] private bool createCloneOnCounterAttack;
+
     public void CreateClone(Vector3 position, Quaternion rotation, Vector3 offset)
     {
         var newClone = Instantiate(clonePrefab);
@@ -23,6 +27,24 @@ public class CloneSkill : Skill
             offset,
             attackDelay,
             FindClosestEnemy);
+    }
+
+    public void CreateCloneOnDashStart(Transform playerTransform)
+    {
+        if (!createCloneOnDashStart) return;
+        CreateClone(playerTransform.position, playerTransform.rotation, Vector3.zero);
+    }
+
+    public void CreateCloneOnDashOver(Transform playerTransform)
+    {
+        if (!createCloneOnDashOver) return;
+        CreateClone(playerTransform.position, playerTransform.rotation, Vector3.zero);
+    }
+
+    public void CreateCloneOnCounterAttack(Transform enemyTransform)
+    {
+        if (!createCloneOnCounterAttack) return;
+        CreateClone(enemyTransform.position, enemyTransform.rotation, new Vector3(2 * player.Flip.facingDir, 0));
     }
 
     protected override void SkillFunction()

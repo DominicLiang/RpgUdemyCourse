@@ -6,6 +6,9 @@ public class CrystalSkill : Skill
     [SerializeField] private GameObject crystalPrefab;
     [SerializeField] private float duration;
 
+    [Header("Crystal Mirage")]
+    [SerializeField] private bool cloneInsteadOfCrystal;
+
     [Header("Growing Crystal")]
     [SerializeField] private Vector2 maxSize;
     [SerializeField] private float growSpeed;
@@ -33,7 +36,8 @@ public class CrystalSkill : Skill
 
         if (currentCrystal == null)
         {
-            CreateCrystal(crystalPrefab);
+            currentCrystal = CreateCrystal(crystalPrefab);
+            Debug.Log(currentCrystal);
         }
         else
         {
@@ -42,9 +46,18 @@ public class CrystalSkill : Skill
             var crystalPos = currentCrystal.transform.position + new Vector3(0, -1);
             player.transform.position = crystalPos;
             currentCrystal.transform.position = playerPos;
-            if (currentCrystal.TryGetComponent(out CrystalSkillController sc))
+            if (cloneInsteadOfCrystal)
             {
-                sc.FinishCrystal();
+                var pos = currentCrystal.transform.position + new Vector3(0, -1);
+                SkillManager.Instance.Clone.CreateClone(pos, player.transform.rotation, Vector3.zero);
+                Destroy(currentCrystal);
+            }
+            else
+            {
+                if (currentCrystal.TryGetComponent(out CrystalSkillController sc))
+                {
+                    sc.FinishCrystal();
+                }
             }
         }
     }
@@ -76,7 +89,7 @@ public class CrystalSkill : Skill
         return false;
     }
 
-    private void CreateCrystal(GameObject crystalToSpawn)
+    private GameObject CreateCrystal(GameObject crystalToSpawn)
     {
         var pos = player.transform.position + new Vector3(0, 1);
         var parent = PlayerManager.Instance.fx.transform;
@@ -93,6 +106,7 @@ public class CrystalSkill : Skill
                 growSpeed,
                 FindClosestEnemy);
         }
+        return newCrystal;
     }
 
     private void RefilCrystal()
