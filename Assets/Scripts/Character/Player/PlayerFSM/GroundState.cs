@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class GroundState : PlayerState
 {
     public GroundState(FSM fsm, Player character, string animBoolName) : base(fsm, character, animBoolName)
@@ -12,6 +14,12 @@ public class GroundState : PlayerState
     public override void Update()
     {
         base.Update();
+
+        if (UnityEngine.Input.GetKeyDown(KeyCode.F))
+        {
+            Fsm.SwitchState(Character.BlackholeState);
+            return;
+        }
 
         if (!ColDetect.IsGrounded)
         {

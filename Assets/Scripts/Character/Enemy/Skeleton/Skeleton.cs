@@ -43,7 +43,6 @@ public class Skeleton : Enemy
 
     protected override bool IsInStunState()
     {
-        // Debug.Log(Fsm.CurrentState == StunState);
         return Fsm.CurrentState == StunState;
     }
 }

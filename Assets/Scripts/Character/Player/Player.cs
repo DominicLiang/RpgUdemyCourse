@@ -57,6 +57,7 @@ public class Player : Character
     public IState CounterState { get; private set; }
     public IState AimSwordState { get; private set; }
     public IState CatchSwordState { get; private set; }
+    public IState BlackholeState { get; private set; }
     #endregion
 
     protected override void Start()
@@ -84,6 +85,7 @@ public class Player : Character
         CounterState = new CounterState(Fsm, this, "Counter");
         AimSwordState = new AimSwordState(Fsm, this, "AimSword");
         CatchSwordState = new CatchSwordState(Fsm, this, "CatchSword");
+        BlackholeState = new BlackholeState(Fsm, this, "Jump");
         Fsm.SwitchState(IdleState);
     }
 

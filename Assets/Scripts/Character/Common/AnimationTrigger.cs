@@ -22,6 +22,7 @@ public class AnimationTrigger<T> : MonoBehaviour where T : Character
         foreach (var hit in colliders)
         {
             if (hit.transform == transform.parent) continue;
+            if (transform.parent.CompareTag("Enemy") && hit.CompareTag("Enemy")) continue;
             var damageable = hit.GetComponent<Damageable>();
             if (!damageable) continue;
             damageable.TakeDamage(transform.parent.gameObject, damageable.gameObject, 1);

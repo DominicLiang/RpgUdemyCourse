@@ -19,6 +19,7 @@ public class Character : MonoBehaviour
     public Rigidbody2D Rb { get; private set; }
     public FlipSprite Flip { get; private set; }
     public CollisionDetection ColDetect { get; private set; }
+    public SpriteRenderer Sr { get; private set; }
 
     public FSM Fsm { get; private set; }
 
@@ -28,6 +29,7 @@ public class Character : MonoBehaviour
         Rb = GetComponent<Rigidbody2D>();
         Flip = GetComponent<FlipSprite>();
         ColDetect = GetComponent<CollisionDetection>();
+        Sr = GetComponentInChildren<SpriteRenderer>();
 
         Fsm = new FSM();
     }
@@ -40,5 +42,10 @@ public class Character : MonoBehaviour
     protected virtual void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(attackCheck.position, attackCheckRadius);
+    }
+
+    public void MakeTransprent(bool isTransprent)
+    {
+        Sr.color = isTransprent ? Color.clear : Color.white;
     }
 }

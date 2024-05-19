@@ -38,7 +38,8 @@ public class CloneSkillController : MonoBehaviour
         Quaternion rotation,
         float cloneDuration,
         Color cloneColor,
-        bool canAttack)
+        bool canAttack,
+        Vector3 offset)
     {
         cloneTimer = cloneDuration;
         this.cloneDuration = cloneDuration;
@@ -47,7 +48,9 @@ public class CloneSkillController : MonoBehaviour
         if (canAttack)
             anim.SetInteger("AttackNumber", Random.Range(1, 3));
 
-        PositionRotationSetup(position, rotation);
+        var pos = position + offset;
+
+        PositionRotationSetup(pos, rotation);
     }
 
     public void AnimationFinishTrigger()

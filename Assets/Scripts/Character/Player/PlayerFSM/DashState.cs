@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class DashState : PlayerState
 {
     public DashState(FSM fsm, Player character, string animBoolName) : base(fsm, character, animBoolName)
@@ -10,7 +12,7 @@ public class DashState : PlayerState
 
         StateTimer = Character.dashDuration;
 
-        SkillManager.Instance.Clone.CreateClone(Character.transform.position, Character.transform.rotation);
+        SkillManager.Instance.Clone.CreateClone(Character.transform.position, Character.transform.rotation, Vector3.zero);
     }
     public override void Update()
     {
