@@ -35,4 +35,9 @@ public class BlackholeSkill : Skill
         if (!currentBlackhole) return false;
         return currentBlackhole.PlayerCanExitState;
     }
+
+    public float GetBlackholeRadius()
+    {
+        return maxSize / 2;
+    }
 }

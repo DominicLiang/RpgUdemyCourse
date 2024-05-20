@@ -21,6 +21,8 @@ public class BlackholeSkillController : MonoBehaviour
     private float blackholeTimer;
     private float blackholeDuration;
 
+    private bool playerCanDisaper;
+
     private Player player;
     private List<KeyCode> keyCodes;
     private List<Transform> targets;
@@ -30,11 +32,11 @@ public class BlackholeSkillController : MonoBehaviour
     {
         keyCodes = new List<KeyCode>
             {
-                KeyCode.Q,
+                KeyCode.A,
+                KeyCode.S,
+                KeyCode.D,
                 KeyCode.W,
-                KeyCode.E,
-                KeyCode.R,
-                KeyCode.T
+                KeyCode.E
             };
         targets = new List<Transform>();
         createdHotkeys = new List<GameObject>();
@@ -58,6 +60,8 @@ public class BlackholeSkillController : MonoBehaviour
         this.cloneAttackCooldown = cloneAttackCooldown;
         this.blackholeDuration = blackholeDuration;
         blackholeTimer = blackholeDuration;
+
+        playerCanDisaper = !SkillManager.Instance.Clone.crystalInsteadOfClone;
     }
 
     private void Update()
@@ -108,6 +112,7 @@ public class BlackholeSkillController : MonoBehaviour
         if (targets.Count <= 0) return;
         cloneAttackReleased = true;
         DestoryHotkeys();
+        if (!playerCanDisaper) return;
         player.MakeTransprent(true);
     }
 
@@ -121,24 +126,29 @@ public class BlackholeSkillController : MonoBehaviour
 
     private void CloneAttackLogic()
     {
-        if (cloneAttackTimer < 0 && cloneAttackReleased && amountOfAttacks > 0)
+        if (cloneAttackTimer >= 0 || !cloneAttackReleased || amountOfAttacks <= 0) return;
+
+        cloneAttackTimer = cloneAttackCooldown;
+
+        int randomIndex = Random.Range(0, targets.Count);
+        var pos = targets[randomIndex].position;
+
+        var offset = new Vector3(Random.Range(0, 100) > 50 ? 2 : -2, 0, 0);
+
+        if (SkillManager.Instance.Clone.crystalInsteadOfClone)
         {
-            cloneAttackTimer = cloneAttackCooldown;
-
-            int randomIndex = Random.Range(0, targets.Count);
-            var pos = targets[randomIndex].position;
-
-            var offset = new Vector3(Random.Range(0, 100) > 50 ? 2 : -2, 0, 0);
-
-            SkillManager.Instance.Clone.CreateClone(pos, Quaternion.identity, offset);
-
-            amountOfAttacks--;
-
-            if (amountOfAttacks <= 0)
-            {
-                Invoke(nameof(FinishBlackhole), 0.5f);
-            }
+            SkillManager.Instance.Crystal.CreateCrystal();
+            SkillManager.Instance.Crystal.CurrentCrystalChooseRandomTarget();
         }
+        else
+        {
+            SkillManager.Instance.Clone.CreateClone(pos, Quaternion.identity, offset);
+        }
+
+        amountOfAttacks--;
+
+        if (amountOfAttacks > 0) return;
+        Invoke(nameof(FinishBlackhole), 0.5f);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

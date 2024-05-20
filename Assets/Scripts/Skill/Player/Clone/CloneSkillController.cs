@@ -10,33 +10,44 @@ public class CloneSkillController : MonoBehaviour
     private float cloneDuration;
     private Color cloneColor;
     private float cloneTimer;
+    private bool canDuplicateClone;
+    private float duplicateProbability;
+    private int facingDir;
     private Func<Transform, float, Transform> findClosestEnemy;
     private Transform closeEnemy;
     private Animator anim;
     private SpriteRenderer sr;
+    private Player player;
 
     private void Awake()
     {
         anim = GetComponentInChildren<Animator>();
         sr = GetComponentInChildren<SpriteRenderer>();
+        facingDir = 1;
     }
 
     public void Setup(
+        Player player,
         Vector3 position,
         Quaternion rotation,
         float cloneDuration,
         Color cloneColor,
-        bool canAttack,
+        bool isDelayAttack,
         Vector3 offset,
         float attackDelay,
+        bool canDuplicateClone,
+        float duplicateProbability,
         Func<Transform, float, Transform> findClosestEnemy)
     {
+        this.player = player;
         cloneTimer = cloneDuration;
         this.cloneDuration = cloneDuration;
         this.cloneColor = cloneColor;
+        this.canDuplicateClone = canDuplicateClone;
         this.findClosestEnemy = findClosestEnemy;
+        this.duplicateProbability = duplicateProbability;
 
-        if (canAttack)// todo 延迟攻击
+        if (isDelayAttack)
             attackDelayTimer = attackDelay;
 
 
@@ -78,10 +89,13 @@ public class CloneSkillController : MonoBehaviour
 
         foreach (var hit in colliders)
         {
-            if (hit.CompareTag("Player") || hit.transform == transform.parent) continue;
-            var damageable = hit.GetComponent<Damageable>();
-            if (!damageable) continue;
+            if (hit.CompareTag("Player")
+                || hit.transform == transform.parent
+                || !hit.TryGetComponent(out Damageable damageable)) continue;
             damageable.TakeDamage(gameObject, damageable.gameObject, 1);
+
+            if (!canDuplicateClone || UnityEngine.Random.Range(0, 100) >= duplicateProbability) continue;
+            SkillManager.Instance.Clone.CreateClone(hit.transform.position, player.transform.rotation, new Vector3(1.5f * facingDir, 0));
         }
     }
 
@@ -100,6 +114,7 @@ public class CloneSkillController : MonoBehaviour
         if (transform.position.x > closeEnemy.position.x)
         {
             transform.Rotate(0, 180, 0);
+            facingDir = -1;
         }
     }
 }

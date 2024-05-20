@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CrystalSkillController : MonoBehaviour
@@ -15,6 +16,7 @@ public class CrystalSkillController : MonoBehaviour
     private float growSpeed;
 
     private Func<Transform, float, Transform> findClosestEnemy;
+    private Transform randomTarget;
 
     private Player player;
     private Animator anim;
@@ -46,6 +48,20 @@ public class CrystalSkillController : MonoBehaviour
         this.findClosestEnemy = findClosestEnemy;
     }
 
+    public void ChooseRandomEnemy()
+    {
+        var radius = SkillManager.Instance.Blackhole.GetBlackholeRadius();
+        var colliders = Physics2D.OverlapCircleAll(transform.position, radius);
+        var colliderList = new List<Collider2D>();
+        foreach (var collider in colliders)
+        {
+            if (!collider.CompareTag("Enemy")) continue;
+            colliderList.Add(collider);
+        }
+        if (colliderList.Count <= 0) return;
+        randomTarget = colliderList[UnityEngine.Random.Range(0, colliderList.Count)].transform;
+    }
+
     private void Update()
     {
         crystalExistTimer -= Time.deltaTime;
@@ -57,7 +73,7 @@ public class CrystalSkillController : MonoBehaviour
 
         if (canMove)
         {
-            var closestEnemy = findClosestEnemy(transform, 10f);
+            var closestEnemy = randomTarget ? randomTarget : findClosestEnemy?.Invoke(transform, 10f);
             if (closestEnemy)
             {
                 var enemyPos = closestEnemy.position + new Vector3(0, 1);

@@ -89,6 +89,11 @@ public class CrystalSkill : Skill
         return false;
     }
 
+    public void CreateCrystal()
+    {
+        currentCrystal = CreateCrystal(crystalPrefab);
+    }
+
     private GameObject CreateCrystal(GameObject crystalToSpawn)
     {
         var pos = player.transform.position + new Vector3(0, 1);
@@ -107,6 +112,12 @@ public class CrystalSkill : Skill
                 FindClosestEnemy);
         }
         return newCrystal;
+    }
+
+    public void CurrentCrystalChooseRandomTarget()
+    {
+        if (!currentCrystal.TryGetComponent(out CrystalSkillController sc)) return;
+        sc.ChooseRandomEnemy();
     }
 
     private void RefilCrystal()
