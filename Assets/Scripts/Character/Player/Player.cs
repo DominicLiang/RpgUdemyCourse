@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(InputController))]
-[RequireComponent(typeof(Damageable))]
+[RequireComponent(typeof(PlayerDamageable))]
 public class Player : Character
 {
     #region Value
@@ -66,7 +66,7 @@ public class Player : Character
 
         InputController = GetComponent<InputController>();
         Damageable = GetComponent<Damageable>();
-        Damageable.onTakeDamage += (from, to) =>
+        Damageable.OnTakeDamage += (from, to) =>
         {
             damageFrom = from;
             Fsm.SwitchState(HitState);
@@ -101,5 +101,10 @@ public class Player : Character
     {
         Fsm.SwitchState(CatchSwordState);
         Destroy(UsedSword);
+    }
+
+    public override void Die()
+    {
+        Fsm.SwitchState(DeadState);
     }
 }

@@ -92,7 +92,7 @@ public class CloneSkillController : MonoBehaviour
             if (hit.CompareTag("Player")
                 || hit.transform == transform.parent
                 || !hit.TryGetComponent(out Damageable damageable)) continue;
-            damageable.TakeDamage(gameObject, damageable.gameObject, 1);
+            // damageable.TakeDamage(gameObject, damageable.gameObject, 1);
 
             if (!canDuplicateClone || UnityEngine.Random.Range(0, 100) >= duplicateProbability) continue;
             SkillManager.Instance.Clone.CreateClone(hit.transform.position, player.transform.rotation, new Vector3(1.5f * facingDir, 0));

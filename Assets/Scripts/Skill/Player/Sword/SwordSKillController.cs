@@ -212,7 +212,7 @@ public class SwordSKillController : MonoBehaviour
     {
         var damageable = other.GetComponent<Damageable>();
         if (!damageable) return;
-        damageable.TakeDamage(player.gameObject, other.gameObject, damage);
+        // damageable.TakeDamage(player.gameObject, other.gameObject, damage);
         if (!needFreeze) return;
         var enemy = other.GetComponent<Enemy>();
         if (!enemy) return;

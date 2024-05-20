@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Damageable))]
 public class FlashFX : MonoBehaviour
 {
     public float flashTime = 0.1f;
@@ -15,7 +14,7 @@ public class FlashFX : MonoBehaviour
         render = transform.GetComponentInChildren<SpriteRenderer>();
 
         damageable = transform.GetComponent<Damageable>();
-        damageable.onTakeDamage += (from, to) => StartCoroutine(Flash());
+        damageable.OnTakeDamage += (from, to) => StartCoroutine(Flash());
     }
 
     // 大坑，一样的东西，用task就是无效，修改材质一定要用协程
@@ -27,17 +26,14 @@ public class FlashFX : MonoBehaviour
     // });
     IEnumerator Flash()
     {
-        render.material.SetColor("_Color", Color.white);
         render.material.SetInt("_Flash", Convert.ToInt32(true));
         yield return new WaitForSeconds(flashTime);
         render.material.SetInt("_Flash", Convert.ToInt32(false));
     }
 
-    public void RedBlink()
+    public void RedBlink(bool isOn)
     {
-        render.material.SetColor("_Color", Color.red);
-        var boolen = Convert.ToBoolean(render.material.GetInt("_Flash"));
-        render.material.SetInt("_Flash", Convert.ToInt32(!boolen));
+        render.material.SetInt("_Blink", Convert.ToInt32(isOn));
     }
 
     public void Reset()

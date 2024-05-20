@@ -12,7 +12,7 @@ public class SkeletonStunState : SkeletonState
 
         StateTimer = Character.stunTime;
 
-        Character.FlashFX.InvokeRepeating(nameof(FlashFX.RedBlink), 0, 0.1f);
+        Character.FlashFX.RedBlink(true);
 
         if (Character.damageFrom)
         {
@@ -36,6 +36,6 @@ public class SkeletonStunState : SkeletonState
     {
         base.Exit(newState);
 
-        Character.FlashFX.Reset();
+        Character.FlashFX.RedBlink(false);
     }
 }

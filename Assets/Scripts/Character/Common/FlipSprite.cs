@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class FlipSprite : MonoBehaviour
@@ -5,6 +6,8 @@ public class FlipSprite : MonoBehaviour
     [Header("Flip Sprite")]
     public int facingDir = 1;
     public bool isFacingRight = true;
+
+    public event Action OnFlip;
 
     public void FlipController(float x)
     {
@@ -23,6 +26,7 @@ public class FlipSprite : MonoBehaviour
         isFacingRight = !isFacingRight;
         facingDir = isFacingRight ? 1 : -1;
         transform.Rotate(0, 180, 0);
+        OnFlip?.Invoke();
     }
 
     [InspectorButton("朝向右的初始值")]

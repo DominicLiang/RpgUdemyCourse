@@ -43,9 +43,8 @@ public class CounterState : PlayerState
                 canCreateClone = false;
             }
 
-            var damageable = hit.GetComponent<Damageable>();
-            if (!damageable) continue;
-            damageable.TakeDamage(Character.gameObject, damageable.gameObject, 1);
+            if (!hit.TryGetComponent(out Damageable to)) return;
+            to.TakeDamage(Character.gameObject);
         }
 
         if (StateTimer < 0 || IsAnimationFinished)

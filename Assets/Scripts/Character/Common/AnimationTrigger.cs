@@ -23,9 +23,9 @@ public class AnimationTrigger<T> : MonoBehaviour where T : Character
         {
             if (hit.transform == transform.parent) continue;
             if (transform.parent.CompareTag("Enemy") && hit.CompareTag("Enemy")) continue;
-            var damageable = hit.GetComponent<Damageable>();
-            if (!damageable) continue;
-            damageable.TakeDamage(transform.parent.gameObject, damageable.gameObject, 1);
+
+            if (!hit.TryGetComponent(out Damageable to)) return;
+            to.TakeDamage(transform.parent.gameObject);
         }
     }
 }

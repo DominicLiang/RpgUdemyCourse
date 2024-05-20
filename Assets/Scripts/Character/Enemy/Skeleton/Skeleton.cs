@@ -45,4 +45,14 @@ public class Skeleton : Enemy
     {
         return Fsm.CurrentState == StunState;
     }
+
+    public override void Die()
+    {
+        Fsm.SwitchState(DeadState);
+    }
+
+    public void DestroyMe()
+    {
+        Destroy(gameObject);
+    }
 }

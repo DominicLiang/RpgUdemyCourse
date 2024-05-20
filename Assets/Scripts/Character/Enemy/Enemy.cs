@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Damageable))]
+[RequireComponent(typeof(EnemyDamageable))]
 [RequireComponent(typeof(FlashFX))]
 public abstract class Enemy : Character
 {
@@ -35,7 +35,7 @@ public abstract class Enemy : Character
         Damageable = GetComponent<Damageable>();
         FlashFX = GetComponent<FlashFX>();
 
-        Damageable.onTakeDamage += (from, to) =>
+        Damageable.OnTakeDamage += (from, to) =>
         {
             damageFrom = from;
             if (damageFrom.CompareTag("Player") && IsInStunState())

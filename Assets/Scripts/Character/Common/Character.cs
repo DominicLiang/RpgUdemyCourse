@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(FlipSprite))]
 [RequireComponent(typeof(CollisionDetection))]
-public class Character : MonoBehaviour
+public abstract class Character : MonoBehaviour
 {
     [Header("Attack Colider")]
     public Transform attackCheck;
@@ -48,4 +48,6 @@ public class Character : MonoBehaviour
     {
         Sr.color = isTransprent ? Color.clear : Color.white;
     }
+
+    public abstract void Die();
 }

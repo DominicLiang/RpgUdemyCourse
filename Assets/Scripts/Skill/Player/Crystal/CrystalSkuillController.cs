@@ -118,7 +118,7 @@ public class CrystalSkillController : MonoBehaviour
         {
             if (hit.CompareTag("Player") || hit.transform == transform) continue;
             if (!hit.TryGetComponent(out Damageable damageable)) continue;
-            damageable.TakeDamage(player.gameObject, damageable.gameObject, 1);
+            // damageable.TakeDamage(player.gameObject, damageable.gameObject, 1);
         }
     }
 
