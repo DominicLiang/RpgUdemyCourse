@@ -37,7 +37,6 @@ public class CrystalSkill : Skill
         if (currentCrystal == null)
         {
             currentCrystal = CreateCrystal(crystalPrefab);
-            Debug.Log(currentCrystal);
         }
         else
         {

@@ -149,7 +149,7 @@ public class SwordSKillController : MonoBehaviour
             transform.position = Vector2.MoveTowards(pos, enemyPos, bounceSpeed * Time.deltaTime);
             if (Vector2.Distance(pos, enemyPos) < 0.1f)
             {
-                TakeDamage(enemyTargets[targetIndex].GetComponent<Collider2D>(), 1, true);
+                TakeDamage(enemyTargets[targetIndex].GetComponent<Collider2D>(), true);
                 targetIndex = (targetIndex + 1) % enemyTargets.Count;
                 bounceAmount--;
                 if (bounceAmount <= 0)
@@ -188,7 +188,7 @@ public class SwordSKillController : MonoBehaviour
         var colliders = Physics2D.OverlapCircleAll(transform.position, 1);
         foreach (var hit in colliders)
         {
-            TakeDamage(hit, 1, false);
+            TakeDamage(hit, false);
         }
     }
 
@@ -198,7 +198,7 @@ public class SwordSKillController : MonoBehaviour
         {
             if (other.CompareTag("Player") || !other.CompareTag("Enemy")) return;
 
-            if (!isSpinning && !isBouncing) TakeDamage(other, 1, true);
+            if (!isSpinning && !isBouncing) TakeDamage(other, true);
 
             GetBounceEnemy();
 
@@ -208,14 +208,12 @@ public class SwordSKillController : MonoBehaviour
         StuckInTo(other);
     }
 
-    private void TakeDamage(Collider2D other, int damage, bool needFreeze)
+    private void TakeDamage(Collider2D other, bool needFreeze)
     {
-        var damageable = other.GetComponent<Damageable>();
-        if (!damageable) return;
-        // damageable.TakeDamage(player.gameObject, other.gameObject, damage);
+        if (!other.TryGetComponent(out Damageable damageable)) return;
+        damageable.TakeDamage(player.gameObject);
         if (!needFreeze) return;
-        var enemy = other.GetComponent<Enemy>();
-        if (!enemy) return;
+        if (!other.TryGetComponent(out Enemy enemy)) return;
         enemy.FreezeTimeForSeconds(0.7f);
     }
 

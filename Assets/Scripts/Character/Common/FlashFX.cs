@@ -1,17 +1,21 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FlashFX : MonoBehaviour
 {
     public float flashTime = 0.1f;
+    public List<Color> igniteColor;
+    public List<Color> chillColor;
+    public List<Color> shockColor;
 
-    private SpriteRenderer render;
+    private SpriteRenderer sr;
     private Damageable damageable;
 
     private void Start()
     {
-        render = transform.GetComponentInChildren<SpriteRenderer>();
+        sr = transform.GetComponentInChildren<SpriteRenderer>();
 
         damageable = transform.GetComponent<Damageable>();
         damageable.OnTakeDamage += (from, to) => StartCoroutine(Flash());
@@ -26,20 +30,42 @@ public class FlashFX : MonoBehaviour
     // });
     IEnumerator Flash()
     {
-        render.material.SetInt("_Flash", Convert.ToInt32(true));
+        sr.material.SetInt("_Flash", Convert.ToInt32(true));
         yield return new WaitForSeconds(flashTime);
-        render.material.SetInt("_Flash", Convert.ToInt32(false));
+        sr.material.SetInt("_Flash", Convert.ToInt32(false));
     }
 
     public void RedBlink(bool isOn)
     {
-        render.material.SetInt("_Blink", Convert.ToInt32(isOn));
+        sr.material.SetInt("_Blink", Convert.ToInt32(isOn));
     }
 
-    public void Reset()
+    public void AlimentsFxFor(List<Color> colors, float seconds)
     {
-        CancelInvoke(nameof(RedBlink));
-        render.material.SetInt("_Flash", Convert.ToInt32(false));
+        StartCoroutine(AlimentsFx(colors, seconds));
     }
 
+    private IEnumerator AlimentsFx(List<Color> colors, float seconds)
+    {
+        var coroutine = StartCoroutine(RepeatingColorFx(colors));
+        yield return new WaitForSeconds(seconds);
+        StopCoroutine(coroutine);
+        sr.color = Color.white;
+    }
+
+    private IEnumerator RepeatingColorFx(List<Color> colors)
+    {
+        while (true)
+        {
+            if (sr.color != colors[0])
+            {
+                sr.color = colors[0];
+            }
+            else
+            {
+                sr.color = colors[1];
+            }
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
 }

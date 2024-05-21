@@ -83,11 +83,33 @@
                 },
                 {
                     "name": "",
+                    "id": "40b7514c-f654-49f0-8b4f-511964665330",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "c09d6b6d-9ced-4b7b-853e-ea7f8f2eb9d4",
                     "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "256bfc21-e89a-499f-bb21-275a278e70d6",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -160,11 +182,33 @@
                 },
                 {
                     "name": "",
+                    "id": "ccc90b18-e371-4bee-92e2-e0e25d775d1c",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "2099ad78-ec53-40fe-80cb-ccf0713a4803",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
+                    "action": "Counter",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cd56fe48-902d-466d-91de-397628de841f",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Counter",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -182,6 +226,17 @@
                 },
                 {
                     "name": "",
+                    "id": "add67752-cf15-4323-a213-698c8141efaa",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "3fba58be-06ea-4626-9cdd-995211a8ca40",
                     "path": "<Keyboard>/ctrl",
                     "interactions": "",
@@ -193,11 +248,33 @@
                 },
                 {
                     "name": "",
+                    "id": "d8d265e8-5af4-4733-94e6-e364b041ff28",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "AimSword",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "7ed6cfb6-246c-4d85-b5dd-07b80d6e7428",
                     "path": "<Mouse>/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
+                    "action": "Mouse",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "31c40687-febd-4d96-b92b-725f0aab6064",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Mouse",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -217,6 +294,17 @@
                 },
                 {
                     "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Gamepad",
+            "bindingGroup": "Gamepad",
+            "devices": [
+                {
+                    "devicePath": "<Gamepad>",
                     "isOptional": false,
                     "isOR": false
                 }

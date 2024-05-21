@@ -49,5 +49,7 @@ public abstract class Character : MonoBehaviour
         Sr.color = isTransprent ? Color.clear : Color.white;
     }
 
+    public abstract void SlowBy(float slowPercentage, float slowDuration);
+
     public abstract void Die();
 }

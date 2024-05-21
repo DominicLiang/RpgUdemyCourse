@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(InputController))]
@@ -6,16 +7,19 @@ public class Player : Character
 {
     #region Value
     [Header("Move Value")]
-    public float moveSpeed = 7f;
+    [HideInInspector] public float moveSpeed;
+    public float defaultMoveSpeed = 7f;
 
     [Header("Jump Value")]
-    public float jumpForce = 20f;
+    [HideInInspector] public float jumpForce;
+    public float defaultJumpForce = 20f;
     public int airJumpCount = 1;
     public float swordReturnImpact = 3f;
     public GameObject UsedSword;
 
     [Header("Dash Value")]
-    public float dashSpeed = 25f;
+    [HideInInspector] public float dashSpeed;
+    public float defaultDashSpeed = 25f;
     public float dashDuration = 0.25f;
     public float dashCooldown = 0.4f;
     public int airDashCount = 1;
@@ -41,6 +45,7 @@ public class Player : Character
     #region Component
     public InputController InputController { get; private set; }
     public Damageable Damageable { get; private set; }
+    public FlashFX FlashFX { get; private set; }
     #endregion
 
     #region StateMachine
@@ -64,8 +69,13 @@ public class Player : Character
     {
         base.Start();
 
+        moveSpeed = defaultMoveSpeed;
+        jumpForce = defaultJumpForce;
+        dashSpeed = defaultDashSpeed;
+
         InputController = GetComponent<InputController>();
         Damageable = GetComponent<Damageable>();
+        FlashFX = GetComponent<FlashFX>();
         Damageable.OnTakeDamage += (from, to) =>
         {
             damageFrom = from;
@@ -106,5 +116,23 @@ public class Player : Character
     public override void Die()
     {
         Fsm.SwitchState(DeadState);
+    }
+
+    public override void SlowBy(float slowPercentage, float slowDuration)
+    {
+        StartCoroutine(Slow(slowPercentage, slowDuration));
+        IEnumerator Slow(float slowPercentage, float slowDuration)
+        {
+            var slow = 1 - slowPercentage;
+            Anim.speed = slow;
+            moveSpeed *= slow;
+            jumpForce *= slow;
+            dashSpeed *= slow;
+            yield return new WaitForSeconds(slowDuration);
+            Anim.speed = 1;
+            moveSpeed = defaultMoveSpeed;
+            jumpForce = defaultJumpForce;
+            dashSpeed = defaultDashSpeed;
+        }
     }
 }
