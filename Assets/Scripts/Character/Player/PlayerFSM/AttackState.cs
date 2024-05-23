@@ -3,7 +3,7 @@ using UnityEngine;
 public class AttackState : PlayerState
 {
     private float lastAttackTime;
-    private int comboCounter;
+    public int comboCounter;
 
     public AttackState(FSM fsm, Player character, string animBoolName) : base(fsm, character, animBoolName)
     {

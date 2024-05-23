@@ -24,6 +24,9 @@ public class Inventory : MonoBehaviour
     private ItemSlot[] inventoryItemSlots;
     private ItemSlot[] stashItemSlots;
 
+    [Header("ItemsCooldown")]
+    private float lastTimeUsedFlask;
+
     private void Awake()
     {
         if (Instance == null)
@@ -181,6 +184,30 @@ public class Inventory : MonoBehaviour
                     slots[i].UpdateSlot(items[j]);
                 }
             }
+        }
+    }
+
+    public ItemDataEquipment GetEquipmentByType(EquipmentType equipmentType)
+    {
+        ItemDataEquipment equipment = null;
+        foreach (var item in equipmentItems)
+        {
+            var equipmentData = item.data as ItemDataEquipment;
+            if (!equipmentData || equipmentData.equipmentType != equipmentType) continue;
+            equipment = equipmentData;
+        }
+        return equipment;
+    }
+
+    public void UsedFlask()
+    {
+        var currentFlask = GetEquipmentByType(EquipmentType.Flask);
+        if (!currentFlask) return;
+        var canUseFlask = Time.time > lastTimeUsedFlask + currentFlask.ItemCooldown;
+        if (canUseFlask)
+        {
+            currentFlask.ExecuteItemEffect(null, null);
+            lastTimeUsedFlask = Time.time;
         }
     }
 }

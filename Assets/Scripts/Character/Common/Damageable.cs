@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Cinemachine;
 using UnityEngine;
 
@@ -60,6 +61,7 @@ public abstract class Damageable : MonoBehaviour
         CritPower.SetDefaultValue(150);
         flashFX = GetComponent<FlashFX>();
         character = GetComponent<Character>();
+        isDead = false;
     }
 
     private void Update()
@@ -93,14 +95,23 @@ public abstract class Damageable : MonoBehaviour
         }
     }
 
-    public virtual void TakeDamage(GameObject from, bool isMagic = false)
+    public virtual void TakeDamage(GameObject from, bool isMagic = false, bool canEffect = true)
     {
         if (isDead) return;
 
-        if (!from.TryGetComponent(out Damageable damageFrom)) return;
+        var damageFrom = from.GetComponent<Damageable>();
 
         var damage = isMagic ? CalculateMagicDamage(damageFrom, this) : CalculateDamage(damageFrom, this);
         currentHp -= damage;
+
+        if (from.CompareTag("Player") && canEffect)
+        {
+            Inventory.Instance.GetEquipmentByType(EquipmentType.Weapon)?.ExecuteItemEffect(from, gameObject);
+        }
+        if (CompareTag("Player") && ((float)currentHp / MaxHp.GetValue()) < 0.3)
+        {
+            Inventory.Instance.GetEquipmentByType(EquipmentType.Armor)?.ExecuteItemEffect(from, gameObject);
+        }
 
         if (isMagic)
         {
@@ -145,14 +156,14 @@ public abstract class Damageable : MonoBehaviour
         {
             if (damage != 0)
             {
-                Debug.Log($"{gameObject.name} 受到了来自 {from.name} 的 {damage} 点伤害");
+                // Debug.Log($"{gameObject.name} 受到了来自 {from.name} 的 {damage} 点伤害");
                 OnTakeDamage?.Invoke(from, gameObject);
                 AttackSense.Instance.HitPause(0.1f);
                 AttackSense.Instance.GetComponent<CinemachineImpulseSource>().GenerateImpulse();
             }
             else
             {
-                Debug.Log($"{gameObject.name} 回避了来自 {from.name} 的攻击");
+                // Debug.Log($"{gameObject.name} 回避了来自 {from.name} 的攻击");
             }
         }
         else
@@ -261,6 +272,24 @@ public abstract class Damageable : MonoBehaviour
     public void SetupIgniteDamage(int damage)
     {
         igniteDamage = damage;
+    }
+
+    public virtual void IncreaseHealthBy(int amount)
+    {
+        currentHp += amount;
+        if (currentHp > MaxHp.GetValue())
+            currentHp = MaxHp.GetValue();
+    }
+
+    public virtual void IncreaseStatBy(int modifier, float duration, Stats statsToModify)
+    {
+        StartCoroutine(StatModifier(modifier, duration, statsToModify));
+        IEnumerator StatModifier(int modifier, float duration, Stats statsToModify)
+        {
+            statsToModify.AddModifier(modifier);
+            yield return new WaitForSeconds(duration);
+            statsToModify.RemoveModifier(modifier);
+        }
     }
 
     protected abstract void Die();

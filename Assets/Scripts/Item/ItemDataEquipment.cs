@@ -4,7 +4,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewItemData", menuName = "Data/Equipment")]
 public class ItemDataEquipment : ItemData
 {
+    public float ItemCooldown;
+
     public EquipmentType equipmentType;
+
+    public ItemEffect[] itemEffects;
 
     [Header("Major Stats")]
     public int strength;
@@ -27,6 +31,14 @@ public class ItemDataEquipment : ItemData
     public int fireDamage;
     public int iceDamege;
     public int lightingDamage;
+
+    public void ExecuteItemEffect(GameObject from, GameObject to)
+    {
+        foreach (var effect in itemEffects)
+        {
+            effect.ExecuteEffect(from, to);
+        }
+    }
 
     public void AddModifiers()
     {

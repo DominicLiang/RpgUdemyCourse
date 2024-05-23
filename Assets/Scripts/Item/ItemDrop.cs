@@ -23,12 +23,13 @@ public class ItemDrop : MonoBehaviour
             }
         }
 
-        if (dropList.Count <= 0) return;
+        if (dropList.Count - 1 < 0) return;
 
         for (int i = 0; i < amountOfItems; i++)
         {
-            var randomItem = dropList[Random.Range(0, dropList.Count - 1)];
-            dropList.Remove(randomItem);
+            var index = Random.Range(0, dropList.Count - 1);
+            if (index < 0) return;
+            var randomItem = dropList[index];
             DropItem(randomItem);
         }
     }

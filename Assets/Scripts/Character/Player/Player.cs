@@ -105,6 +105,9 @@ public class Player : Character
 
         if (Input.GetKeyDown(KeyCode.Q))
             SkillManager.Instance.Crystal.CanUseSkill();
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            Inventory.Instance.UsedFlask();
     }
 
     public void CatchSword()

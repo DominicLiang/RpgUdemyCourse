@@ -118,6 +118,9 @@ public class CrystalSkillController : MonoBehaviour
         {
             if (hit.CompareTag("Player") || hit.transform == transform) continue;
             if (!hit.TryGetComponent(out Damageable damageable)) continue;
+            var equipedAmulet = Inventory.Instance.GetEquipmentByType(EquipmentType.Amulet);
+            if (equipedAmulet != null)
+                equipedAmulet.ExecuteItemEffect(player.gameObject, hit.gameObject);
             damageable.TakeDamage(player.gameObject, true);
         }
     }

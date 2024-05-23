@@ -2,20 +2,13 @@ using UnityEngine;
 
 public class ItemObject : MonoBehaviour
 {
-    private ItemData itemData;
+    [SerializeField] private ItemData itemData;
 
-    public ItemData ItemData
+    private void OnValidate()
     {
-        get
-        {
-            return itemData;
-        }
-        set
-        {
-            itemData = value;
-            GetComponent<SpriteRenderer>().sprite = value.icon;
-            gameObject.name = value.name;
-        }
+        if (!itemData) return;
+        GetComponent<SpriteRenderer>().sprite = itemData.icon;
+        gameObject.name = itemData.name;
     }
 
     private Rigidbody2D rb;
@@ -27,13 +20,15 @@ public class ItemObject : MonoBehaviour
 
     public void Setup(ItemData item, Vector2 velocity)
     {
-        ItemData = item;
+        itemData = item;
         GetComponent<Rigidbody2D>().velocity = velocity;
+        GetComponent<SpriteRenderer>().sprite = item.icon;
+        gameObject.name = item.name;
     }
 
     public void PickupItem()
     {
-        Inventory.Instance.AddItem(ItemData);
+        Inventory.Instance.AddItem(itemData);
         Destroy(gameObject);
     }
 }
