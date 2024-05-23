@@ -8,7 +8,7 @@ public class Stats
 {
     [SerializeField] private int value;
 
-    private List<int> modifiers;
+    [SerializeField] private List<int> modifiers;
 
     public Stats()
     {
@@ -37,6 +37,6 @@ public class Stats
 
     public void RemoveModifier(int modifier)
     {
-        modifiers.RemoveAt(modifier);
+        modifiers.Remove(modifier);
     }
 }

@@ -1,3 +1,5 @@
+using UnityEngine.EventSystems;
+
 public class EquipmentSlot : ItemSlot
 {
     public EquipmentType slotType;
@@ -5,5 +7,10 @@ public class EquipmentSlot : ItemSlot
     private void OnValidate()
     {
         gameObject.name = $"SlotType - {slotType}";
+    }
+
+    public override void OnPointerClick(PointerEventData eventData)
+    {
+        Inventory.Instance.UnEquipItem(item.data);
     }
 }

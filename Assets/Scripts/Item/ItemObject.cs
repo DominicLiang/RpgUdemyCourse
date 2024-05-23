@@ -2,20 +2,38 @@ using UnityEngine;
 
 public class ItemObject : MonoBehaviour
 {
-    [SerializeField] private ItemData itemData;
+    private ItemData itemData;
 
-    private void OnValidate()
+    public ItemData ItemData
     {
-        GetComponent<SpriteRenderer>().sprite = itemData.icon;
-        gameObject.name = itemData.name;
+        get
+        {
+            return itemData;
+        }
+        set
+        {
+            itemData = value;
+            GetComponent<SpriteRenderer>().sprite = value.icon;
+            gameObject.name = value.name;
+        }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private Rigidbody2D rb;
+
+    private void Awake()
     {
-        if (other.CompareTag("Player"))
-        {
-            Inventory.Instance.AddItem(itemData);
-            Destroy(gameObject);
-        }
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    public void Setup(ItemData item, Vector2 velocity)
+    {
+        ItemData = item;
+        GetComponent<Rigidbody2D>().velocity = velocity;
+    }
+
+    public void PickupItem()
+    {
+        Inventory.Instance.AddItem(ItemData);
+        Destroy(gameObject);
     }
 }

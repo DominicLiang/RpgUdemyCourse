@@ -48,6 +48,8 @@ public abstract class Damageable : MonoBehaviour
     public float shockDuration;
     private float shockedTimer;
 
+    private bool isDead;
+
     public event Action<GameObject, GameObject> OnTakeDamage;
     private FlashFX flashFX;
     private Character character;
@@ -93,6 +95,8 @@ public abstract class Damageable : MonoBehaviour
 
     public virtual void TakeDamage(GameObject from, bool isMagic = false)
     {
+        if (isDead) return;
+
         if (!from.TryGetComponent(out Damageable damageFrom)) return;
 
         var damage = isMagic ? CalculateMagicDamage(damageFrom, this) : CalculateDamage(damageFrom, this);
@@ -153,6 +157,7 @@ public abstract class Damageable : MonoBehaviour
         }
         else
         {
+            isDead = true;
             Die();
         }
     }

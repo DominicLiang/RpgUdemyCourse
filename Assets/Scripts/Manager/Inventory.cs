@@ -57,29 +57,43 @@ public class Inventory : MonoBehaviour
 
         if (old)
         {
-            UnEquipmentMethod(old);
+            UnEquipMethod(old);
             AddItemMethod(inventoryItems, inventoryDic, old);
         }
 
         RemoveItemMethod(inventoryItems, inventoryDic, item);
-        EquipmentMethod(newEquipment, newItem);
+        EquipMethod(newEquipment, newItem);
 
         UpdateSlotUI(inventoryItemSlots, inventoryItems);
         UpdateSlotUI(equipmentSlots, equipmentItems);
     }
 
-    private void EquipmentMethod(ItemDataEquipment newEquipment, InventoryItem newItem)
+    public void UnEquipItem(ItemData item)
+    {
+        var unequipData = item as ItemDataEquipment;
+        var unequipItem = new InventoryItem(unequipData);
+
+        UnEquipMethod(unequipData);
+        AddItemMethod(inventoryItems, inventoryDic, unequipData);
+
+        UpdateSlotUI(inventoryItemSlots, inventoryItems);
+        UpdateSlotUI(equipmentSlots, equipmentItems);
+    }
+
+    private void EquipMethod(ItemDataEquipment newEquipment, InventoryItem newItem)
     {
         equipmentItems.Add(newItem);
         equipmentDic.Add(newEquipment, newItem);
+        newEquipment.AddModifiers();
     }
 
-    private void UnEquipmentMethod(ItemDataEquipment old)
+    private void UnEquipMethod(ItemDataEquipment old)
     {
         if (equipmentDic.TryGetValue(old, out var oldValue))
         {
             equipmentItems.Remove(oldValue);
             equipmentDic.Remove(old);
+            old.RemoveModifiers();
         }
     }
 
@@ -147,7 +161,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    private void UpdateSlotUI(ItemSlot[] slots, List<InventoryItem> items)
+    public void UpdateSlotUI(ItemSlot[] slots, List<InventoryItem> items)
     {
         for (int i = 0; i < slots.Length; i++)
         {
@@ -155,17 +169,11 @@ public class Inventory : MonoBehaviour
 
             if (!slot)
             {
-                if (i < items.Count)
-                {
-                    slots[i].UpdateSlot(items[i]);
-                }
-                else
-                {
-                    slots[i].UpdateSlot(null);
-                }
+                slots[i].UpdateSlot(i < items.Count ? items[i] : null);
             }
             else
             {
+                slots[i].UpdateSlot(null);
                 for (int j = 0; j < items.Count; j++)
                 {
                     var data = items[j].data as ItemDataEquipment;
