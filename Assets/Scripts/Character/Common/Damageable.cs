@@ -293,4 +293,23 @@ public abstract class Damageable : MonoBehaviour
     }
 
     protected abstract void Die();
+
+    public Stats StatsOfType(StatType type) => type switch
+    {
+        StatType.Strength => Str,
+        StatType.Agility => Agi,
+        StatType.Intelegence => Int,
+        StatType.Vitality => Vit,
+        StatType.Damage => Damage,
+        StatType.CritChance => CritChance,
+        StatType.CritPower => CritPower,
+        StatType.Health => MaxHp,
+        StatType.Armor => Armor,
+        StatType.Evasion => Evasion,
+        StatType.MagicRes => MagicResistance,
+        StatType.FireDamage => FireDamage,
+        StatType.IceDamage => IceDamage,
+        StatType.LightingDamage => LightingDamage,
+        _ => null
+    };
 }

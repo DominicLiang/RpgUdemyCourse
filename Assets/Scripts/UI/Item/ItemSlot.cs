@@ -3,17 +3,43 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemSlot : MonoBehaviour, IPointerClickHandler
+public class ItemSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler
 {
     public InventoryItem item;
 
-    [SerializeField] private Image itemImage;
-    [SerializeField] private TextMeshProUGUI itemText;
+    [SerializeField] protected Image itemImage;
+    [SerializeField] protected TextMeshProUGUI itemText;
+
+    private UI ui;
+
+    private void Start()
+    {
+        ui = GetComponentInParent<UI>();
+    }
 
     public virtual void OnPointerClick(PointerEventData eventData)
     {
+        if (item == null) return;
         if (item.data.itemType != ItemType.Equipment) return;
         Inventory.Instance.EquipItem(item.data);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (item == null) return;
+        var equipment = item.data as ItemDataEquipment;
+        if (equipment == null) return;
+        ui.tooltip.ShowTooltip(equipment);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (item == null) return;
+        ui.tooltip.HideTooltip();
+    }
+
+    public void OnPointerMove(PointerEventData eventData)
+    {
     }
 
     public void UpdateSlot(InventoryItem newItem)

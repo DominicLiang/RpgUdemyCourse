@@ -11,6 +11,7 @@ public class EquipmentSlot : ItemSlot
 
     public override void OnPointerClick(PointerEventData eventData)
     {
+        if (item == null || item.data == null) return;
         Inventory.Instance.UnEquipItem(item.data);
     }
 }

@@ -31,6 +31,7 @@ public class ItemDataEquipment : ItemData
     public int fireDamage;
     public int iceDamege;
     public int lightingDamage;
+    public object craftingMaterials;
 
     public void ExecuteItemEffect(GameObject from, GameObject to)
     {
@@ -81,5 +82,40 @@ public class ItemDataEquipment : ItemData
         playerDamageable.FireDamage.RemoveModifier(fireDamage);
         playerDamageable.IceDamage.RemoveModifier(iceDamege);
         playerDamageable.LightingDamage.RemoveModifier(lightingDamage);
+    }
+
+    public override string GetDescription()
+    {
+        sb.Length = 0;
+
+        AddItemDescription(strength, "Strength");
+        AddItemDescription(agility, "Agility");
+        AddItemDescription(intelligence, "Intelligence");
+        AddItemDescription(vitality, "Vitality");
+
+        AddItemDescription(damage, "Damage");
+        AddItemDescription(critChance, "CritChance");
+        AddItemDescription(critPower, "CritPower");
+
+        AddItemDescription(health, "Health");
+        AddItemDescription(evasion, "Evasion");
+        AddItemDescription(armor, "Armor");
+        AddItemDescription(magicResistance, "MagicResistance");
+
+        AddItemDescription(fireDamage, "FireDamage");
+        AddItemDescription(iceDamege, "IceDamege");
+        AddItemDescription(lightingDamage, "LightingDamage");
+
+        return sb.ToString();
+    }
+
+    private void AddItemDescription(int value, string name)
+    {
+        if (value != 0)
+        {
+            if (sb.Length > 0) sb.AppendLine();
+
+            if (value > 0) sb.Append(name + ": " + value);
+        }
     }
 }

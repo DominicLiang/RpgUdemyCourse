@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -19,10 +20,12 @@ public class Inventory : MonoBehaviour
     [SerializeField] private Transform equipmentSlotParent;
     [SerializeField] private Transform inventorySlotParent;
     [SerializeField] private Transform stashSlotParent;
+    [SerializeField] private Transform statSlotParent;
 
     private EquipmentSlot[] equipmentSlots;
     private ItemSlot[] inventoryItemSlots;
     private ItemSlot[] stashItemSlots;
+    private StatsSlot[] statSlots;
 
     [Header("ItemsCooldown")]
     private float lastTimeUsedFlask;
@@ -49,6 +52,7 @@ public class Inventory : MonoBehaviour
         equipmentSlots = equipmentSlotParent.GetComponentsInChildren<EquipmentSlot>();
         inventoryItemSlots = inventorySlotParent.GetComponentsInChildren<ItemSlot>();
         stashItemSlots = stashSlotParent.GetComponentsInChildren<ItemSlot>();
+        statSlots = statSlotParent.GetComponentsInChildren<StatsSlot>();
     }
 
     public void EquipItem(ItemData item)
@@ -102,6 +106,7 @@ public class Inventory : MonoBehaviour
 
     public void AddItem(ItemData item)
     {
+        if (!CanAddItem()) return;
         switch (item.itemType)
         {
             case ItemType.Material:
@@ -185,6 +190,11 @@ public class Inventory : MonoBehaviour
                 }
             }
         }
+
+        for (int i = 0; i < statSlots.Length; i++)
+        {
+            statSlots[i].UpdateStatValue();
+        }
     }
 
     public ItemDataEquipment GetEquipmentByType(EquipmentType equipmentType)
@@ -209,5 +219,15 @@ public class Inventory : MonoBehaviour
             currentFlask.ExecuteItemEffect(null, null);
             lastTimeUsedFlask = Time.time;
         }
+    }
+
+    public bool CanAddItem()
+    {
+        return inventoryItems.Count < inventoryItemSlots.Length;
+    }
+
+    public void CanCraft(ItemDataEquipment craftData, object craftingMaterials)
+    {
+        throw new NotImplementedException();
     }
 }
