@@ -1,4 +1,7 @@
+using System;
 using System.Collections;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class DeadState : PlayerState
@@ -14,6 +17,16 @@ public class DeadState : PlayerState
     {
         base.Enter(lastState);
         Character.StartCoroutine(Dissolve());
+        Task.Run(async () =>
+        {
+            float counter = 1;
+            while (Character.Sr.material.GetFloat("_DissoiveAmount") > 0)
+            {
+                counter -= dissolveRate;
+                Character.Sr.material.SetFloat("_DissoiveAmount", counter);
+                await Task.Delay((int)(refreshRate * 1000));
+            }
+        });
     }
 
     public override void Update()

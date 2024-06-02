@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class FlashFX : MonoBehaviour
@@ -18,7 +20,12 @@ public class FlashFX : MonoBehaviour
         sr = transform.GetComponentInChildren<SpriteRenderer>();
 
         damageable = transform.GetComponent<Damageable>();
-        damageable.OnTakeDamage += (from, to) => StartCoroutine(Flash());
+        damageable.OnTakeDamage += (from, to) => UniTask.ToCoroutine(async () =>
+       {
+           sr.material.SetInt("_Flash", Convert.ToInt32(true));
+           await UniTask.WaitForSeconds(5);
+           sr.material.SetInt("_Flash", Convert.ToInt32(false));
+       });
     }
 
     // 大坑，一样的东西，用task就是无效，修改材质一定要用协程
@@ -31,7 +38,7 @@ public class FlashFX : MonoBehaviour
     IEnumerator Flash()
     {
         sr.material.SetInt("_Flash", Convert.ToInt32(true));
-        yield return new WaitForSeconds(flashTime);
+        yield return new WaitForSeconds(5);
         sr.material.SetInt("_Flash", Convert.ToInt32(false));
     }
 
