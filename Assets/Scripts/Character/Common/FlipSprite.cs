@@ -28,18 +28,4 @@ public class FlipSprite : MonoBehaviour
         transform.Rotate(0, 180, 0);
         OnFlip?.Invoke();
     }
-
-    [InspectorButton("朝向右的初始值")]
-    public void DefaultRight()
-    {
-        isFacingRight = true;
-        facingDir = 1;
-    }
-
-    [InspectorButton("朝向左的初始值")]
-    public void DefaultLeft()
-    {
-        isFacingRight = false;
-        facingDir = -1;
-    }
 }
